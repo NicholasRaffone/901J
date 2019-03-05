@@ -25,39 +25,7 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpc8al3rzc/initialize.cpp.o",
-            "src/initialize.cpp"
-        ],
-        "directory": "/Users/raffonen/Documents/test",
-        "file": "src/initialize.cpp"
-    },
-    {
-        "arguments": [
-            "clang++",
-            "-c",
-            "-target",
-            "armv7ar-none-none-eabi",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1/arm-none-eabi/thumb/v7+fp/softfp",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1/backward",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/include",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/include-fixed",
-            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include",
-            "-iquote./include",
-            "-iquote./include/./",
-            "-mcpu=cortex-a9",
-            "-mfpu=neon-fp16",
-            "-mfloat-abi=softfp",
-            "-D_POSIX_THREADS",
-            "-D_UNIX98_THREAD_MUTEX_ATTRIBUTES",
-            "-Os",
-            "-funwind-tables",
-            "-ffunction-sections",
-            "-fdata-sections",
-            "-fdiagnostics-color",
-            "--std=gnu++17",
-            "-o",
-            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpc8al3rzc/autonomous.cpp.o",
+            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpegyrmmun/autonomous.cpp.o",
             "src/autonomous.cpp"
         ],
         "directory": "/Users/raffonen/Documents/test",
@@ -89,11 +57,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/config.cpp.o",
-            "src/config.cpp"
+            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpegyrmmun/opcontrol.cpp.o",
+            "src/opcontrol.cpp"
         ],
         "directory": "/Users/raffonen/Documents/test",
-        "file": "src/config.cpp"
+        "file": "src/opcontrol.cpp"
     },
     {
         "arguments": [
@@ -121,10 +89,42 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/opcontrol.cpp.o",
-            "src/opcontrol.cpp"
+            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpegyrmmun/initialize.cpp.o",
+            "src/initialize.cpp"
         ],
         "directory": "/Users/raffonen/Documents/test",
-        "file": "src/opcontrol.cpp"
+        "file": "src/initialize.cpp"
+    },
+    {
+        "arguments": [
+            "clang++",
+            "-c",
+            "-target",
+            "armv7ar-none-none-eabi",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1/arm-none-eabi/thumb/v7+fp/softfp",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include/c++/8.2.1/backward",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/include",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/include-fixed",
+            "-isystem/usr/local/Cellar/arm-gcc-bin/8-2018-q4-major/bin/../lib/gcc/arm-none-eabi/8.2.1/../../../../arm-none-eabi/include",
+            "-iquote./include",
+            "-iquote./include/./",
+            "-mcpu=cortex-a9",
+            "-mfpu=neon-fp16",
+            "-mfloat-abi=softfp",
+            "-D_POSIX_THREADS",
+            "-D_UNIX98_THREAD_MUTEX_ATTRIBUTES",
+            "-Os",
+            "-funwind-tables",
+            "-ffunction-sections",
+            "-fdata-sections",
+            "-fdiagnostics-color",
+            "--std=gnu++17",
+            "-o",
+            "/var/folders/6x/3z6rknw57b9ck_sw6bh6b_640000gn/T/tmpegyrmmun/config.cpp.o",
+            "src/config.cpp"
+        ],
+        "directory": "/Users/raffonen/Documents/test",
+        "file": "src/config.cpp"
     }
 ]
