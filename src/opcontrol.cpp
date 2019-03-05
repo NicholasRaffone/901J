@@ -29,6 +29,18 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
+void brakeMotors{//brake the base motors
+  left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  left_wheel.move_velocity(0);
+  left_chain.move_velocity(0);
+  right_wheel.move_velocity(0);
+  right_chain.move_velocity(0);
+}
+
+}
  void opcontrol() {
 
    while (true) {
@@ -42,6 +54,7 @@
      left_chain.move_velocity(left);
      right_wheel.move_velocity(right);
      right_chain.move_velocity(right);
+     
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
        intake.move_velocity(600);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
@@ -50,6 +63,7 @@
        intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        intake.move_velocity(0);
      }
+
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
        angler.move_velocity(-600);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
@@ -58,22 +72,16 @@
        angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
        angler.move_velocity(0);
      }
+
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
-       puncher.move_velocity(600);
+       puncher.move_relative(100,600);
      }else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        puncher.move_velocity(0);
      }
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
-       left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-       right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-       left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-       right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-       left_wheel.move_velocity(0);
-       left_chain.move_velocity(0);
-       right_wheel.move_velocity(0);
-       right_chain.move_velocity(0);
+       brakeMotors();
      }else{
        left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
