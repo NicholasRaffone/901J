@@ -54,7 +54,7 @@ void brakeMotors{//brake the base motors
      left_chain.move_velocity(left);
      right_wheel.move_velocity(right);
      right_chain.move_velocity(right);
-     
+
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
        intake.move_velocity(600);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
