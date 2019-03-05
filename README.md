@@ -8,3 +8,9 @@ As we have moved from VCS to Pros we have decided to document our code on GitHub
 Feel free to use our code as long as we don't face off during comps and if we do, you let us win.
 
 Thanks;) 901J
+
+## Winter Reveal
+
+<a href="https://www.youtube.com/embed/xmA_5Q04d3Q
+" target="_blank"><img src="http://img.youtube.com/vi/xmA_5Q04d3Q/0.jpg" 
+alt="Winter Reveal" width="600" height="400" border="10" /></a>
