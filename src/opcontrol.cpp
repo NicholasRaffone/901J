@@ -29,7 +29,7 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
-void brakeMotors{//brake the base motors
+void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -39,42 +39,77 @@ void brakeMotors{//brake the base motors
   right_wheel.move_velocity(0);
   right_chain.move_velocity(0);
 }
+void unBrakeMotors(){
+  left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+}
+
+void turn(float goal){//simple gyro turn function (positive to right)
+  gyro.reset();//sets gyro value to 0
+  while(goal - gyro.get_value() /10.0 != 0.0){//while there is error
+    if(goal - gyro.get_value() /10.0 > 0){//turns right if goal positive
+      left_wheel.move_velocity(50);
+      left_chain.move_velocity(50);
+      right_wheel.move_velocity(-50);
+      right_chain.move_velocity(-50);
+    }
+    else{//left if not positive
+      left_wheel.move_velocity(-50);
+      left_chain.move_velocity(-50);
+      right_wheel.move_velocity(50);
+      right_chain.move_velocity(50);
+    }
+    pros::delay(2);
+  }//stops movement after turn
+  brakeMotors();
+  unBrakeMotors();
 
 }
- void opcontrol() {
 
+ void opcontrol() {
+int maxspeed = 200;
    while (true) {
-     double power = 600*master.get_analog(ANALOG_LEFT_Y)/127;
-     double turn = 600*master.get_analog(ANALOG_RIGHT_X)/127;
-     //int left = (int)(pow(((power + turn)/600.0),2.0)*600.0);
-     //int right = (int) (pow(((power - turn)/600.0),2.0)*600.0);
-     int left = power+turn;
-     int right = power-turn;
+     double power = maxspeed*master.get_analog(ANALOG_LEFT_Y)/127;
+     double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/127;
+
+     int left = (int)(pow(((power + turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
+     int right = (int) (pow(((power - turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
+     //int left = power+turn;
+     //int right = power-turn;
+
+     if((power+turn) < 0){//makes sure left and right values are pos/neg
+       left*=-1;
+     } else if((power - turn)<0){
+       right *=-1;
+     }
+     //arcade drive
      left_wheel.move_velocity(left);
      left_chain.move_velocity(left);
      right_wheel.move_velocity(right);
      right_chain.move_velocity(right);
 
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
-       intake.move_velocity(600);
+       intake.move_velocity(maxspeed);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
-       intake.move_velocity(-600);
+       intake.move_velocity(-maxspeed);
      } else{
        intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        intake.move_velocity(0);
      }
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
-       angler.move_velocity(-600);
+       angler.move_velocity(-maxspeed);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
-       angler.move_velocity(600);
+       angler.move_velocity(maxspeed);
      } else{
        angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
        angler.move_velocity(0);
      }
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
-       puncher.move_relative(100,600);
+       puncher.move_relative(100,maxspeed);
      }else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        puncher.move_velocity(0);
@@ -83,10 +118,7 @@ void brakeMotors{//brake the base motors
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
        brakeMotors();
      }else{
-       left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+       unBrakeMotors();
      }
 
      pros::delay(2);

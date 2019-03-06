@@ -7,6 +7,7 @@ extern const int RIGHT_WHEEL_PORT; //15
 extern const int INTAKE_MOTOR_PORT; //9
 extern const int PUNCHER_MOTOR_PORT; //20
 extern const int ANGLER_MOTOR_PORT; //11
+extern const char GYRO_PORT; //B
 
 extern pros::Motor left_wheel;
 extern pros::Motor right_wheel;
@@ -16,3 +17,4 @@ extern pros::Controller master;
 extern pros::Motor intake;
 extern pros::Motor puncher;
 extern pros::Motor angler;
+extern pros::ADIGyro gyro;
