@@ -29,8 +29,12 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
-void shoot(){
-  puncher.move_relative(-240,1000);
+
+void setpuncher(){
+  puncher.move_relative(-263,1000);
+}
+void shootpuncher(){
+  puncher.move_relative(-80,1000);
 }
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -48,7 +52,7 @@ void unBrakeMotors(){
   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
-
+/*
 void turn(float goal){//simple gyro turn function (positive to right)
   gyro.reset();//sets gyro value to 0
   while(goal - gyro.get_value() /10.0 != 0.0){//while there is error
@@ -69,10 +73,11 @@ void turn(float goal){//simple gyro turn function (positive to right)
   brakeMotors();
   unBrakeMotors();
 
-}
+}*/
 
- void opcontrol() {
+void opcontrol() {
 int maxspeed = 200;
+setpuncher();
    while (true) {
      double power = maxspeed*master.get_analog(ANALOG_LEFT_Y)/127;
      double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/150;//127 max, reduce for less turn
@@ -112,7 +117,9 @@ int maxspeed = 200;
      }
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
-       shoot();
+       shootpuncher();
+       pros::delay(1000);
+       setpuncher();
      } /*else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
        puncher.move_voltage(0);
@@ -125,6 +132,7 @@ int maxspeed = 200;
      }
 
      pros::delay(2);
+
    }
 }
 /**
