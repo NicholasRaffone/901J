@@ -11,6 +11,6 @@ Thanks;) 901J
 
 ## Winter Reveal
 
-<a href="https://www.youtube.com/embed/xmA_5Q04d3Q
-" target="_blank"><img src="http://img.youtube.com/vi/xmA_5Q04d3Q/0.jpg" 
+<a href="https://www.youtube.com/embed/5NzbwMYjZFo
+" target="_blank"><img src="http://img.youtube.com/vi/5NzbwMYjZFo/0.jpg" 
 alt="Winter Reveal" width="600" height="400" border="10" /></a>
