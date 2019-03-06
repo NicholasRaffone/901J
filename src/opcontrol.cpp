@@ -30,7 +30,7 @@
 **/
 
 void shoot(){
-  puncher.move_relative(1000,150);
+  puncher.move_relative(-240,1000);
 }
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -111,12 +111,12 @@ int maxspeed = 200;
        angler.move_velocity(0);
      }
 
-     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
+     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shoot();
-     }else{
-       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       puncher.move_velocity(0);
-     }
+     } /*else{
+       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+       puncher.move_voltage(0);
+     }*/
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
        brakeMotors();

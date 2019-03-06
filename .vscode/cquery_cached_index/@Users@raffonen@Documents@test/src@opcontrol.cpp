@@ -30,7 +30,7 @@
 **/
 
 void shoot(){
-  puncher.move_relative(1000,150);
+  puncher.move_relative(5000,200);
 }
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
