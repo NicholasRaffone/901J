@@ -75,7 +75,7 @@ void turn(float goal){//simple gyro turn function (positive to right)
 int maxspeed = 200;
    while (true) {
      double power = maxspeed*master.get_analog(ANALOG_LEFT_Y)/127;
-     double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/127;
+     double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/150;//127 max, reduce for less turn
 
      int left = (int)(pow(((power + turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
      int right = (int) (pow(((power - turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
@@ -84,7 +84,7 @@ int maxspeed = 200;
 
      if((power+turn) < 0){//makes sure left and right values are pos/neg
        left*=-1;
-     } else if((power - turn)<0){
+     } if((power - turn)<0){
        right *=-1;
      }
      //arcade drive
@@ -94,9 +94,9 @@ int maxspeed = 200;
      right_chain.move_velocity(right);
 
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
-       intake.move_velocity(maxspeed);
-     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
        intake.move_velocity(-maxspeed);
+     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
+       intake.move_velocity(maxspeed);
      } else{
        intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        intake.move_velocity(0);
