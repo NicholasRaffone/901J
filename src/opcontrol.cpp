@@ -29,6 +29,9 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
+void shoot(){
+  puncher.move_relative(1000,150);
+}
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -109,7 +112,7 @@ int maxspeed = 200;
      }
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
-       puncher.move_relative(100,maxspeed);
+       shoot();
      }else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        puncher.move_velocity(0);
