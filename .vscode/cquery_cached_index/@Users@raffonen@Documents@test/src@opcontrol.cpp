@@ -46,7 +46,7 @@ void brakeMotors(){//brake the base motors
   right_wheel.move_velocity(0);
   right_chain.move_velocity(0);
 }
-void unBrakeMotors(){
+void  unBrakeMotors(){
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -105,7 +105,6 @@ int maxspeed = 200;
        intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        intake.move_velocity(0);
      }
-
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
        angler.move_velocity(-maxspeed);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
