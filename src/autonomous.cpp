@@ -13,13 +13,13 @@ const double WHEEL_RADIUS = 5.08;;
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
- void unBrakeMotors(){
+ static void unBrakeMotors(){
    left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
    right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
    left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
    right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
  }
- void brakeMotors(){//brake the base motors
+ static void brakeMotors(){//brake the base motors
    left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
    right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
    left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);

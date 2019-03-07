@@ -46,7 +46,7 @@ void brakeMotors(){//brake the base motors
   right_wheel.move_velocity(0);
   right_chain.move_velocity(0);
 }
-void  unBrakeMotors(){
+void unBrakeMotors(){
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
