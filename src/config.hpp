@@ -18,3 +18,5 @@ extern pros::Motor intake;
 extern pros::Motor puncher;
 extern pros::Motor angler;
 extern pros::ADIGyro gyro;
+
+extern int autonomousPreSet;

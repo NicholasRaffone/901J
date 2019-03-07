@@ -18,3 +18,5 @@ pros::Motor intake(INTAKE_MOTOR_PORT,pros::E_MOTOR_GEARSET_18, true,pros::E_MOTO
 pros::Motor puncher(PUNCHER_MOTOR_PORT,pros::E_MOTOR_GEARSET_18,true,pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor angler(ANGLER_MOTOR_PORT, pros::E_MOTOR_GEARSET_18, true,pros::E_MOTOR_ENCODER_DEGREES);
 pros::ADIGyro gyro(GYRO_PORT);
+
+int autonomousPreSet = 0;

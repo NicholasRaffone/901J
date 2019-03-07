@@ -77,7 +77,6 @@ void turn(float goal){//simple gyro turn function (positive to right)
 
 void opcontrol() {
 int maxspeed = 200;
-setpuncher();
    while (true) {
      double power = maxspeed*master.get_analog(ANALOG_LEFT_Y)/127;
      double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/150;//127 max, reduce for less turn
@@ -120,7 +119,10 @@ setpuncher();
        shootpuncher();
        pros::delay(1000);
        setpuncher();
-     } /*else{
+     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) == 1){
+       setpuncher();
+       pros::delay(1000);
+     }/*else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
        puncher.move_voltage(0);
      }*/
