@@ -52,28 +52,6 @@ void unBrakeMotors(){
   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 }
-/*
-void turn(float goal){//simple gyro turn function (positive to right)
-  gyro.reset();//sets gyro value to 0
-  while(goal - gyro.get_value() /10.0 != 0.0){//while there is error
-    if(goal - gyro.get_value() /10.0 > 0){//turns right if goal positive
-      left_wheel.move_velocity(50);
-      left_chain.move_velocity(50);
-      right_wheel.move_velocity(-50);
-      right_chain.move_velocity(-50);
-    }
-    else{//left if not positive
-      left_wheel.move_velocity(-50);
-      left_chain.move_velocity(-50);
-      right_wheel.move_velocity(50);
-      right_chain.move_velocity(50);
-    }
-    pros::delay(2);
-  }//stops movement after turn
-  brakeMotors();
-  unBrakeMotors();
-
-}*/
 
 void opcontrol() {
 int maxspeed = 200;
