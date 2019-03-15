@@ -9,42 +9,43 @@
  * to keep execution time for this mode under a few seconds.
  */
 
+lv_obj_t * label1;
+lv_obj_t * label2;
+
  static lv_res_t btn_rel_action(lv_obj_t * btn)
  {
-     //Increase the button height
-     if (lv_obj_get_height(btn) == 85){
-       lv_obj_set_height(btn, 50);
-       autonColor = 1; //blue
-     } else{
-       lv_obj_set_height(btn, 85);
-       autonColor = 0; //red
-     }
-
-     return LV_RES_OK;
+    autonColor++;
+    //label1 = lv_label_create(btn, NULL);
+    //lv_obj_align(btn, label1, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+    if(autonColor %2 == 0){
+      lv_label_set_text(label1, "Red");
+    } else{
+      lv_label_set_text(label1, "Blue");
+    }
+    return LV_RES_OK;
  }
  static lv_res_t btn_rel_action_two(lv_obj_t * btn)
  {
-     //Increase the button height
-     if (lv_obj_get_height(btn) == 85){
-       lv_obj_set_height(btn, 50);
-       autonSide = 1; //far
-     } else{
-       lv_obj_set_height(btn, 85);
-       autonSide = 0; //close
-     }
-
-     return LV_RES_OK;
+   autonSide++;
+   //label2 = lv_label_create(btn, NULL);
+   //lv_obj_align(btn, label2, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);
+   if(autonColor %2 == 0){
+     lv_label_set_text(label2, "Close");
+   } else{
+     lv_label_set_text(label2, "Far");
+   }
+   return LV_RES_OK;
  }
 
 void initialize() {/*Create a button*/
 
     lv_obj_t * btn1 = lv_btn_create(lv_scr_act(), NULL);         /*Create a button on the currently loaded screen*/
-		lv_obj_t * label = lv_label_create(btn1, NULL);
+		label1 = lv_label_create(btn1, NULL);
 		lv_btn_set_action(btn1, LV_BTN_ACTION_CLICK, btn_rel_action); /*Set function to be called when the button is released*/
-    lv_obj_align(btn1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);  /*Align below the label*/
+    lv_obj_align(btn1, label1, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);  /*Align below the label*/
 
     /*Create a label on the button (the 'label' variable can be reused)*/
-    lv_label_set_text(label, "Color");
+    lv_label_set_text(label1, "Red");
 
     /*Copy the previous button*/
     lv_obj_t * btn2 = lv_btn_create(lv_scr_act(), btn1);        /*Second parameter is an object to copy*/
@@ -52,8 +53,8 @@ void initialize() {/*Create a button*/
     lv_obj_align(btn2, btn1, LV_ALIGN_OUT_RIGHT_MID, 50, 0);    /*Align next to the prev. button.*/
 
     /*Create a label on the button*/
-    label = lv_label_create(btn2, NULL);
-    lv_label_set_text(label, "Flag");
+    label2 = lv_label_create(btn2, NULL);
+    lv_label_set_text(label2, "Blue");
 }
 
 /**
