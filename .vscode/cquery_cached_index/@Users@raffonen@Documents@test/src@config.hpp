@@ -19,5 +19,5 @@ extern pros::Motor puncher;
 extern pros::Motor angler;
 extern pros::ADIGyro gyro;
 
-extern int autonColor; //0 = red, 1 = blue
-extern int autonSide; //0 = close, 1 = far
+extern bool blueSide; //false = red, true = blue
+extern bool farSide; //false = close, true = far

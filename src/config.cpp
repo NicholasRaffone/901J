@@ -19,5 +19,5 @@ pros::Motor puncher(PUNCHER_MOTOR_PORT,pros::E_MOTOR_GEARSET_18,true,pros::E_MOT
 pros::Motor angler(ANGLER_MOTOR_PORT, pros::E_MOTOR_GEARSET_18, true,pros::E_MOTOR_ENCODER_DEGREES);
 pros::ADIGyro gyro(GYRO_PORT);
 
-int autonColor = 0;
-int autonSide = 0;
+bool blueSide = false;
+bool farSide = false;

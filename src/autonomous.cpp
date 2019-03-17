@@ -131,6 +131,7 @@ void redclose(){
 
 void redfar(){
   /**
+
   **/
 
 }
@@ -144,11 +145,11 @@ void bluefar(){
   /**
   **/
 }
-/**
- void autonSelector(){
-   if(redside chosen autonColor == 0)
+
+void autonSelector(){
+   if(blueSide == false)//if red
    {
-     if(flag side yes? autonSide == 0){
+     if(farSide == false){
           redclose();
      }
        else{ //far side
@@ -156,19 +157,19 @@ void bluefar(){
      }
    }
  else {//blue side chosen
-   if(flag side yes? autonSide == 0){
+   if(farSide == false){
       blueclose();
    }
      else{ //far side
       bluefar();
    }
  }
-}**/
+}
 /*void tempauton(){
   moveP(60.0, 1); //move one tile while intake out
   turnP(90.0);//turn 90 degrees to the right
 }*/
 void autonomous() {
-  //autonSelector();
+  autonSelector();
   //tempauton();
 }

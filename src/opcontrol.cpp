@@ -55,7 +55,7 @@ void unBrakeMotors(){
 
 void turnP(double goal){//simple gyro turn function (positive to right)
   gyro.reset();//sets gyro value to 0
-  double error = goal - gyro.get_value() / 10.0;
+  double error = goal - gyro.get_value() / 10.0; //gyro value is 10 * angle
   double Kp = 0.6;
   int velocity;
   if (goal < 0 && velocity > 0) { velocity *= -1.0; }
@@ -75,7 +75,7 @@ void turnP(double goal){//simple gyro turn function (positive to right)
 
 
 
- void moveP(double distance, int multi){
+ void moveP(double distance, int multi){//move for distance in cm and multitask accordingly
   double circumference = 5.08 * 2.0 * M_PI;
   double goal = (distance/circumference)*360.0; //make error into degrees
 
@@ -127,20 +127,21 @@ void turnP(double goal){//simple gyro turn function (positive to right)
   unBrakeMotors();
   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   angler.move_velocity(0);
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
 
 }
 
 
 void opcontrol() {
-int maxspeed = 200;
+const int MAXSPEED = 200;
+const int TURNAMT = 150;
    while (true) {
-     double power = maxspeed*master.get_analog(ANALOG_LEFT_Y)/127;
-     double turn = maxspeed*master.get_analog(ANALOG_RIGHT_X)/150;//127 max, reduce for less turn
+     double power = MAXSPEED * master.get_analog(ANALOG_LEFT_Y) / 127;
+     double turn = MAXSPEED * master.get_analog(ANALOG_RIGHT_X) / TURNAMT;//127 max, increase for less turn
 
-     int left = (int)(pow(((power + turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
-     int right = (int) (pow(((power - turn)/(maxspeed*1.0)),2.0)*(maxspeed*1.0));
+     int left = (int)(pow(((power + turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
+     int right = (int) (pow(((power - turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
      //int left = power+turn;
      //int right = power-turn;
 
@@ -156,17 +157,17 @@ int maxspeed = 200;
      right_chain.move_velocity(right);
 
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
-       intake.move_velocity(-maxspeed);
+       intake.move_velocity(-MAXSPEED);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
-       intake.move_velocity(maxspeed);
+       intake.move_velocity(MAXSPEED);
      } else{
        intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        intake.move_velocity(0);
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
-       angler.move_velocity(-maxspeed);
+       angler.move_velocity(-MAXSPEED);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
-       angler.move_velocity(maxspeed);
+       angler.move_velocity(MAXSPEED);
      } else{
        angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
        angler.move_velocity(0);
