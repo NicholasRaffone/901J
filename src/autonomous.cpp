@@ -30,6 +30,23 @@ const double WHEEL_RADIUS = 5.08;
    right_wheel.move_velocity(0);
    right_chain.move_velocity(0);
  }
+
+ void angle(bool up){
+   if(up){
+     angler.move_relative(-75,1000);
+   }else{
+     angler.move_relative(75,1000);
+   }
+   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+   angler.move_velocity(0);
+ }
+
+ void intakeball(){
+   intake.move_relative(500,1000);
+   angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+   angler.move_velocity(0);
+ }
+
 /*
  void turnP(double goal){//simple gyro turn function (positive to right)
    gyro.reset();//sets gyro value to 0

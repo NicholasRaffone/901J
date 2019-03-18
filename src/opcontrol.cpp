@@ -67,7 +67,7 @@ void turnP(double goal){//simple gyro turn function (positive to right)
       right_chain.move_velocity(-1*velocity);
 
     error = goal - gyro.get_value()/ 10.0;
-    pros::delay(2);
+    pros::delay(2);//dont hog cpu
   }//stops movement after turn
   brakeMotors();
   unBrakeMotors();
@@ -142,14 +142,14 @@ const int TURNAMT = 150;
 
      int left = (int)(pow(((power + turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
      int right = (int) (pow(((power - turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
-     //int left = power+turn;
-     //int right = power-turn;
 
-     if((power+turn) < 0){//makes sure left and right values are pos/neg
-       left*=-1;
-     } if((power - turn)<0){
-       right *=-1;
+     if( (power+turn) < 0){//makes sure left and right values are pos/neg
+       left *= -1;
      }
+     if( (power - turn) < 0){
+       right *= -1;
+     }
+
      //arcade drive
      left_wheel.move_velocity(left);
      left_chain.move_velocity(left);
@@ -180,10 +180,8 @@ const int TURNAMT = 150;
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) == 1){
        setpuncher();
        pros::delay(1000);
-     }/*else{
-       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-       puncher.move_voltage(0);
-     }*/
+     }
+
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1){
        moveP(60.0, 1); //move one tile while intake out
        turnP(90.0);//turn 90 degrees to the right
@@ -198,38 +196,3 @@ const int TURNAMT = 150;
 
    }
 }
-/**
-void PIcontrol(float distance, int motor_input){
-	const double WHEEL_RADIUS = 5.08;
-	const double circumference = WHEEL_RADIUS*2*M_PI;
-	bool endreached = false;
-	double encoderavg = (IntegratedEncoder(right_wheel) + IntegratedEncoder(left_wheel))/2;
-	const double degreeGoal = (distance/circumference)*360.0*GEAR_RATIO;
-	double error = degreeGoal - encoderavg;
-	double kp = 0.45, kI = 0.0005 , integral_limit = 400.0, motorkP = 0.5;
-	double integral = 0.0, encodeDiff = 0.0, riseTimeIteration = 0.0;
-	if (distance < 0) { motor_vel *= -1; }
-	right_wheel.tare_position();
-  left_wheel.tare_position();
-
-	while(!endreached){
-		double encoderavg = (IntegratedEncoder(right_wheel) + IntegratedEncoder(left_wheel))/2;
-		double endoderdiff = IntegratedEncoder(right_wheel) - IntegratedEncoder(left_wheel);
-		if( std::abs(error) < integral_limit) //disable integral unless error is low enough
-	{ integral += error; } else { integral = 0; }
-		error = degreeGoal - encoderAvg;
-
-    if (std::abs(error*kp) > std::abs(motor_input*3.75)){ //if far enough away keep error a certain value so it's not too big
-        error = motor_input/kp;
-			}
-
-    motor_vel = std::abs((kp*error)) + std::abs(integral*kI); //PI motor velocity calc
-
-     if (riseTimeIteration < 100){ //to allow for more rise time (starts slowers instead of immediately ramping up)
-            riseTimeIteration += 10.0;
-            motor_vel = riseTimeIteration;}
-			if (std::abs(motor_vel) > motor_input){ motor_vel = motor_input; }//if motor vel too big just set to max motor limit parameter
-			if (distance < 0 && motor_vel > 0) { motor_vel *= -1.0; } //makes sure it spins in right direction if reverse
-
-	}
-}*/
