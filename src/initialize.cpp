@@ -92,6 +92,7 @@
 
    std::string color;//initialize strings
    std::string side;
+   std::string parkk;
 
    if (blueSide == true){
     color = "Blue";
@@ -105,7 +106,13 @@
    side = "Close";
   }
 
-  std::string concat = color + " " + side + " selected"; //create string to display
+  if(park){
+    parkk = " with Park ";
+  }else{
+    parkk = " withOUT Park ";
+  }
+
+  std::string concat = color + " " + side + parkk + "selected"; //create string to display
 
   const char* c_data = concat.c_str( );//make string into char array cuz set_text only take char*
    lv_mbox_set_text(mbox1, c_data);
@@ -113,6 +120,26 @@
    return LV_RES_OK;
  }
 
+ static lv_res_t parkyes(lv_obj_t * btn)
+ {
+   static lv_style_t parkstyle;
+   lv_style_copy(&parkstyle, &lv_style_plain);    /*Copy a built-in style to initialize the new style*/
+   parkstyle.body.main_color = LV_COLOR_YELLOW;
+   parkstyle.body.grad_color = LV_COLOR_YELLOW;
+   parkstyle.body.border.color = LV_COLOR_GRAY;
+   parkstyle.body.border.width = 2;
+   parkstyle.text.color = LV_COLOR_BLACK;
+   lv_obj_t * label1 = lv_obj_get_child(btn, NULL); /*The label is the only child*/
+   if(park){
+     park = false;
+     lv_label_set_text(label1, "No Park");
+   }else{
+     park = true;
+     lv_label_set_text(label1, "Park");
+   }
+   lv_obj_set_style(btn, &parkstyle);
+   return LV_RES_OK;
+ }
 
 
 void initialize() {/*Create a three buttons, color, side, display auton */
@@ -125,12 +152,20 @@ void initialize() {/*Create a three buttons, color, side, display auton */
      initredstyle.body.border.width = 2;
      initredstyle.text.color = LV_COLOR_WHITE;
 
+     static lv_style_t parkstyle;
+     lv_style_copy(&parkstyle, &lv_style_plain);    /*Copy a built-in style to initialize the new style*/
+     parkstyle.body.main_color = LV_COLOR_YELLOW;
+     parkstyle.body.grad_color = LV_COLOR_YELLOW;
+     parkstyle.body.border.color = LV_COLOR_GRAY;
+     parkstyle.body.border.width = 2;
+     parkstyle.text.color = LV_COLOR_BLACK;
+
     lv_obj_t * btn1 = lv_btn_create(lv_scr_act(), NULL);         /*Create a button on the currently loaded screen*/
     lv_obj_set_style(btn1, &initredstyle);
     lv_obj_t * label = lv_label_create(btn1, NULL);
     lv_label_set_text(label, "Red");
 		lv_btn_set_action(btn1, LV_BTN_ACTION_CLICK, color_action); /*Set function to be called when the button is released*/
-    lv_obj_align(btn1, label, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 20);  /*Align below the label*/
+    lv_obj_align(btn1, label, LV_ALIGN_OUT_BOTTOM_LEFT, -30, 20);  /*Align below the label*/
 
 
     /*Copy the previous button*/
@@ -146,10 +181,16 @@ void initialize() {/*Create a three buttons, color, side, display auton */
     lv_obj_t * btn3 = lv_btn_create(lv_scr_act(), NULL);
     //lv_obj_set_style(btn3, &lv_style_plain);
     lv_btn_set_action(btn3, LV_BTN_ACTION_CLICK, display_auton);
-    lv_obj_align(btn3, btn2, LV_ALIGN_OUT_RIGHT_TOP, 10,-60);
+    lv_obj_align(btn3, btn2, LV_ALIGN_OUT_RIGHT_TOP, 35,-60);
     label = lv_label_create(btn3, NULL);
     lv_label_set_text(label, "Display \nAuton");
 
+    lv_obj_t * btn4 = lv_btn_create(lv_scr_act(), NULL);
+    lv_obj_set_style(btn4, &parkstyle);
+    lv_btn_set_action(btn4, LV_BTN_ACTION_CLICK, parkyes);
+    lv_obj_align(btn4, btn2, LV_ALIGN_OUT_RIGHT_TOP, 35,60);
+    label = lv_label_create(btn4, NULL);
+    lv_label_set_text(label, "Park");
 }
 
 /**

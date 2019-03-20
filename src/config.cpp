@@ -21,3 +21,4 @@ pros::ADIGyro gyro(GYRO_PORT);
 
 bool blueSide = false;
 bool farSide = false;
+bool park = true;

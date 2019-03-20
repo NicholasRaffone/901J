@@ -21,3 +21,4 @@ extern pros::ADIGyro gyro;
 
 extern bool blueSide; //false = red, true = blue
 extern bool farSide; //false = close, true = far
+extern bool park;

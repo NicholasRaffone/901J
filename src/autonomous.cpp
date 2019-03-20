@@ -126,7 +126,7 @@ const double WHEEL_RADIUS = 5.08;
    intake.move_velocity(0);
 
  }*/
-void redclose(){
+void redclose_nopark(){
   /**
     looking at close flag
     angle down
@@ -141,24 +141,45 @@ void redclose(){
     punch top flag
     straight toggle low flag
     back one tile
-    if park, back onto platform tile, turn right 90, straight onto platform
-    if not, turn 90 degrees right, intake out and straight
+    turn 90 degrees right, intake out and straight
   **/
 }
 
-void redfar(){
+void redclose_park(){
+  /**
+  **/
+}
+
+void redfar_nopark(){
   /**
 
   **/
 
 }
 
-void blueclose(){
+void redfar_park(){
+  /**
+
+  **/
+
+}
+
+void blueclose_nopark(){
   /**
   **/
 }
 
-void bluefar(){
+void blueclose_park(){
+  /**
+  **/
+}
+
+void bluefar_nopark(){
+  /**
+  **/
+}
+
+void bluefar_park(){
   /**
   **/
 }
@@ -167,18 +188,38 @@ void autonSelector(){
    if(blueSide == false)//if red
    {
      if(farSide == false){
-          redclose();
+       if(park){
+          redclose_park();
+        }
+        else{
+          redclose_nopark();
+        }
      }
        else{ //far side
-          redfar();
+         if(park){
+            redfar_park();
+          }
+          else{
+            redfar_nopark();
+          }
      }
    }
  else {//blue side chosen
    if(farSide == false){
-      blueclose();
+     if(park){
+        blueclose_park();
+      }
+      else{
+        blueclose_nopark();
+      }
    }
      else{ //far side
-      bluefar();
+       if(park){
+          bluefar_park();
+        }
+        else{
+          bluefar_nopark();
+        }
    }
  }
 }
