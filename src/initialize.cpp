@@ -107,9 +107,9 @@
   }
 
   if(park){
-    parkk = " with Park ";
+    parkk = " WITH Park ";
   }else{
-    parkk = " withOUT Park ";
+    parkk = " WITHOUT Park ";
   }
 
   std::string concat = color + " " + side + parkk + "selected"; //create string to display

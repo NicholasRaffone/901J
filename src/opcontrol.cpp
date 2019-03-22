@@ -165,27 +165,47 @@ const int TURNAMT = 150;
        intake.move_velocity(0);
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
+       angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        angler.move_velocity(-MAXSPEED);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
+       angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        angler.move_velocity(MAXSPEED);
      } else{
-       angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+       //angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
        angler.move_velocity(0);
      }
+     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
+       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+       arm.move_velocity(-MAXSPEED);
+     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
+       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+       arm.move_velocity(MAXSPEED);
+     }else{
+       arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+       arm.move_velocity(0);
+     }
 
-     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
+     /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shootpuncher();
        pros::delay(1000);
        setpuncher();
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) == 1){
        setpuncher();
        pros::delay(1000);
+     }**/
+     if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
+       puncher.move_velocity(-MAXSPEED);
+     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
+       puncher.move_velocity(MAXSPEED);
+     } else{
+       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+       puncher.move_velocity(0);
      }
 
-     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) == 1){
+     /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) == 1){
        moveP(60.0, 1); //move one tile while intake out
        turnP(90.0);//turn 90 degrees to the right
-     }
+     }**/
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
        brakeMotors();
      }else{
