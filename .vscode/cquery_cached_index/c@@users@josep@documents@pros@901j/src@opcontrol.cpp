@@ -125,7 +125,7 @@ uint32_t encoder_value = 0;
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-       move_PID(50.0,150,0);
+       move_PID(50.0,200,0);
 
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){

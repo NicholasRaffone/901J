@@ -6,7 +6,7 @@
 const float WHEEL_RADIUS = 1.625;
 const double CIRCUMFERENCE = 2*M_PI*WHEEL_RADIUS;
 const float ENCODERTICKSPERREVOLUTION = 360.0;
-const int DEFAULTSLEWRATEINCREMENT = 20;
+const int DEFAULTSLEWRATEINCREMENT = 25;
 
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -52,7 +52,12 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   int targetVelocity = 0;
   double currentPosition = 0;
   double error = 0;
-  double kP = 0.3;
+  double previous_error = degreeGoal;
+  double kP = 0.45;
+  double kI = 0.0002;
+  double kD = 0.02;
+  double integral = 0;
+  double derivative = 0;
 
   if (targetDistance < 0) {maxVelocity *= -1;}
   mainEncoder.reset();
@@ -60,11 +65,20 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   while(!goalMet){
     currentPosition = mainEncoder.get_value();
     error = degreeGoal - currentPosition;
-    if (std::abs(error) > maxVelocity){
-      targetVelocity = maxVelocity;
-    } else {
-      targetVelocity = kP*error;
+
+    if (std::abs(error) < 720){
+      integral += error;
     }
+
+    derivative = error - previous_error;
+    previous_error = error;
+
+    targetVelocity = kP*error + kI*integral + kD*derivative;
+
+    if (targetVelocity > maxVelocity){
+      targetVelocity = maxVelocity;
+    }
+
     slewRateControl(&left_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&left_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
@@ -76,9 +90,12 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
     right_wheel.move_velocity(targetVelocity);
     right_chain.move_velocity(targetVelocity);
     **/
-    if (std::abs(error) < 10){
+    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
       goalMet = true;
     }
+    //if (std::abs(error) < 10){
+      //goalMet = true;
+    //}
     pros::delay(10);
   }
   brakeMotors();
