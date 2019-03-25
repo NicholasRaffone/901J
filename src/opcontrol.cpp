@@ -55,6 +55,8 @@ uint32_t encoder_value = 0;
 
      int left = (int)(pow(((power + turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
      int right = (int) (pow(((power - turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
+     printf("left %d\r\n", left);
+     printf("right %d\r\n", right);
 
      if( (power+turn) < 0){//makes sure left and right values are pos/neg
        left *= -1;
@@ -64,11 +66,18 @@ uint32_t encoder_value = 0;
      }
 
      //arcade drive
+
      left_wheel.move_velocity(left);
      left_chain.move_velocity(left);
      right_wheel.move_velocity(right);
      right_chain.move_velocity(right);
 
+     /**
+     slewRateControl(&left_wheel, left);
+     slewRateControl(&left_chain, left);
+     slewRateControl(&right_wheel, right);
+     slewRateControl(&right_chain, right);
+     **/
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
        intake.move_velocity(-MAXSPEED);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
@@ -116,7 +125,7 @@ uint32_t encoder_value = 0;
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-       move_PID(50.0,50,0);
+       move_PID(50.0,150,0);
 
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){

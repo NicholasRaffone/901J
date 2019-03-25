@@ -1,8 +1,8 @@
 #include "main.h"
 #include "config.hpp"
 #include "config.hpp"
+#include "auton_functions.h"
 
-const double WHEEL_RADIUS = 5.08;
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -14,22 +14,7 @@ const double WHEEL_RADIUS = 5.08;
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
- static void unBrakeMotors(){
-   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
- }
- static void brakeMotors(){//brake the base motors
-   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   left_wheel.move_velocity(0);
-   left_chain.move_velocity(0);
-   right_wheel.move_velocity(0);
-   right_chain.move_velocity(0);
- }
+
 
  void angle(bool up){
    if(up){
