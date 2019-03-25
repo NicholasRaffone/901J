@@ -53,63 +53,6 @@
    unBrakeMotors();
  }
 
-
-
-  void moveP(double distance, int multi){
-   double circumference = 5.08 * 2.0 * M_PI;
-   double goal = (distance/circumference)*360.0; //make error into degrees
-
-   double Kp = 0.5;
-   double speed;
-
-   right_wheel.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);//sets wheels to encode in degrees
-   right_chain.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-   left_wheel.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-   left_chain.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-
-   right_wheel.tare_position();//sets encoders position to 0 degrees
-   right_chain.tare_position();
-   left_wheel.tare_position();
-   left_chain.tare_position();
-   double encoderavg = (right_wheel.get_position() + right_chain.get_position() +  left_wheel.get_position()
-                             + left_chain.get_position())/4;
-   double error = goal - encoderavg;
-
-   while(error != 0){
-     speed = error * Kp;
-
-     if(speed > 200){//sets max speed to +/- 200
-       speed = 200;
-     }else if (speed < -200){
-       speed = -200;
-     }
-
-     if(multi == 1){//setting multitask
-       intake.move_velocity(-200); //intake out
-     } else if (multi == 2){
-       intake.move_velocity(200); //intake in
-     } else if (multi == 3){
-       angler.move_velocity(-200);
-     } else if (multi == 4){
-       angler.move_velocity(200);
-     }
-     left_wheel.move_velocity(speed);
-     left_chain.move_velocity(speed);
-     right_wheel.move_velocity(speed);
-     right_chain.move_velocity(speed);
-     encoderavg = (right_wheel.get_position() + right_chain.get_position() +  left_wheel.get_position()
-                               + left_chain.get_position())/4;
-     error = goal - encoderavg;//recalculate error
-     pros::delay(2); //don't hog cpu
-   }
-
-   brakeMotors();
-   unBrakeMotors();
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   angler.move_velocity(0);
-   intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   intake.move_velocity(0);
-
  }*/
 void redclose_nopark(){
   /**
@@ -208,10 +151,7 @@ void autonSelector(){
    }
  }
 }
-/*void tempauton(){
-  moveP(60.0, 1); //move one tile while intake out
-  turnP(90.0);//turn 90 degrees to the right
-}*/
+
 void autonomous() {
   autonSelector();
   //tempauton();

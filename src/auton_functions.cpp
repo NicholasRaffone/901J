@@ -96,16 +96,6 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
     slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
 
-    /**
-    left_wheel.move_velocity(targetVelocity);
-    left_chain.move_velocity(targetVelocity);
-    right_wheel.move_velocity(targetVelocity);
-    right_chain.move_velocity(targetVelocity);
-
-    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
-      goalMet = true;
-    }
-    **/
     if (std::abs(error) < 10){
       goalMet = true;
     }
@@ -164,16 +154,6 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
     slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
 
-    /**
-    left_wheel.move_velocity(targetVelocity);
-    left_chain.move_velocity(targetVelocity);
-    right_wheel.move_velocity(targetVelocity);
-    right_chain.move_velocity(targetVelocity);
-
-    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
-      goalMet = true;
-    }
-    **/
     if (std::abs(error) < 10){
       goalMet = true;
     }
@@ -193,7 +173,6 @@ void move_align(float targetDistance, int velocity){
    right_chain.move_velocity(velocity);
 
   while (std::abs(mainEncoder.get_value()) < degreeGoal) {
-    // Continue running this loop as long as the motor is not within +-5 units of its goal
     pros::delay(5);
   }
 }
