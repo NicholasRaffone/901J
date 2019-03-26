@@ -191,7 +191,7 @@ void turn_PID(float targetDegree, int maxVelocity){
   double kD = 0.00;
   double integral = 0;
   double derivative = 0;
-
+  if(targetDegree<0){maxVelocity *= -1;}
   gyro.reset();
   gyro2.reset();
 
@@ -199,11 +199,15 @@ void turn_PID(float targetDegree, int maxVelocity){
   while(!goalMet){
     currentPosition = (gyro.get_value()+gyro2.get_value())/2;
     error = degreeGoal - currentPosition;
-    printf("%f\r\n",currentPosition);
+    // printf("%f\r\n",currentPosition);
     if (std::abs(error) < 360){
       integral += error;
     }
-
+    printf("gyro avg %f\r\n",currentPosition);
+    currentPosition = gyro.get_value();
+    printf("gyro 1 %f\r\n",currentPosition);
+    currentPosition = gyro2.get_value();
+    printf("gyro 2 %f\r\n",currentPosition);
     derivative = error - previous_error;
     previous_error = error;
 
@@ -213,14 +217,11 @@ void turn_PID(float targetDegree, int maxVelocity){
       targetVelocity = maxVelocity;
     }
 
-    if (targetDegree < 0){
-      leftTarget = -1*targetVelocity;
-      rightTarget = targetVelocity;
-    } else {
+
       leftTarget = targetVelocity;
       rightTarget = -1*targetVelocity;
-    }
-    printf("%d\r\n",targetVelocity);
+
+  
     slewRateControl(&left_wheel, leftTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&left_chain, leftTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
