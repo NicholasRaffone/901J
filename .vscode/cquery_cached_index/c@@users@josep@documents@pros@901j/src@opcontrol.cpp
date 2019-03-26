@@ -49,14 +49,30 @@ void opcontrol() {
 const int MAXSPEED = 200;
 const int TURNAMT = 150;
 uint32_t encoder_value = 0;
+pros::delay(1000);
+move_PID(50.0,180.0,0);
+turn_PID(180.0,100);
+move_PID(50.0,180.0,0);
+turn_PID(-90.0,100);
+turn_PID(-90.0,90);
+move_PID(50.0,200.0,0);
+move_PID(-50.0,180.0,0);
+
    while (true) {
+     /**
+     double currentPosition = (gyro.get_value()+gyro2.get_value())/2;
+     printf("gyro avg %f\r\n",currentPosition);
+     currentPosition = gyro.get_value();
+     printf("gyro 1 %f\r\n",currentPosition);
+     currentPosition = gyro2.get_value();
+     printf("gyro 2 %f\r\n",currentPosition);
+     **/
      double power = MAXSPEED * master.get_analog(ANALOG_LEFT_Y) / 127;
      double turn = MAXSPEED * master.get_analog(ANALOG_RIGHT_X) / TURNAMT;//127 max, increase for less turn
 
      int left = (int)(pow(((power + turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
      int right = (int) (pow(((power - turn)/(MAXSPEED*1.0)),2.0)*(MAXSPEED*1.0));
-     printf("left %d\r\n", left);
-     printf("right %d\r\n", right);
+
 
      if( (power+turn) < 0){//makes sure left and right values are pos/neg
        left *= -1;
@@ -125,7 +141,7 @@ uint32_t encoder_value = 0;
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-      move_align(50.0,80.0);
+      turn_PID(90.0,90.0);
 
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
@@ -133,8 +149,7 @@ uint32_t encoder_value = 0;
      }else{
        unBrakeMotors();
      }
-     encoder_value = mainEncoder.get_value();
-     printf("%d\r\n",encoder_value);
+
 
 
      pros::delay(10);

@@ -15,3 +15,4 @@ void slewRateControl(pros::Motor *motor, int targetVelocity, int increment);
 void move_PID(float targetDistance, int maxVelocity, int multiTask);
 void park_PID(float targetDistance, int maxVelocity, int multiTask);
 void move_align(float targetDistance, int maxVelocity);
+void turn_PID(float targetDegree, int maxVelocity);

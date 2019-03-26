@@ -44,7 +44,6 @@ void slewRateControl(pros::Motor *motor, int targetVelocity, int increment){
     currentVelocity = targetVelocity;
   }
   motor->move_velocity(currentVelocity);
-  printf("wtd %d\r\n", currentVelocity);
 }
 
 void move_PID(float targetDistance, int maxVelocity, int multiTask){
@@ -55,9 +54,9 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.42;
-  double kI = 0.0004;
-  double kD = 0.05;
+  double kP = 0.46;
+  double kI = 0.0008;
+  double kD = 0.02;
   double integral = 0;
   double derivative = 0;
 
@@ -175,4 +174,63 @@ void move_align(float targetDistance, int velocity){
   while (std::abs(mainEncoder.get_value()) < degreeGoal) {
     pros::delay(5);
   }
+}
+
+void turn_PID(float targetDegree, int maxVelocity){
+
+  const double degreeGoal = targetDegree*10;
+  bool goalMet = false;
+  int targetVelocity = 0;
+  int leftTarget = 0;
+  int rightTarget = 0;
+  double currentPosition = 0;
+  double error = 0;
+  double previous_error = degreeGoal;
+  double kP = 0.3;
+  double kI = 0.0002;
+  double kD = 0.00;
+  double integral = 0;
+  double derivative = 0;
+
+  gyro.reset();
+  gyro2.reset();
+
+
+  while(!goalMet){
+    currentPosition = (gyro.get_value()+gyro2.get_value())/2;
+    error = degreeGoal - currentPosition;
+    printf("%f\r\n",currentPosition);
+    if (std::abs(error) < 360){
+      integral += error;
+    }
+
+    derivative = error - previous_error;
+    previous_error = error;
+
+    targetVelocity = kP*error + kI*integral + kD*derivative;
+
+    if (std::abs(targetVelocity) > std::abs(maxVelocity)){
+      targetVelocity = maxVelocity;
+    }
+
+    if (targetDegree < 0){
+      leftTarget = -1*targetVelocity;
+      rightTarget = targetVelocity;
+    } else {
+      leftTarget = targetVelocity;
+      rightTarget = -1*targetVelocity;
+    }
+    printf("%d\r\n",targetVelocity);
+    slewRateControl(&left_wheel, leftTarget, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&left_chain, leftTarget, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&right_chain, rightTarget, DEFAULTSLEWRATEINCREMENT);
+
+    if (std::abs(error) < 15){
+      goalMet = true;
+    }
+
+    pros::delay(10);
+  }
+  brakeMotors();
 }
