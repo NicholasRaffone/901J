@@ -12,7 +12,8 @@ const char GYRO2_PORT = 'D';
 const char ENCODER_TOP_PORT = 'A';
 const char ENCODER_BOT_PORT = 'B';
 const char LIMIT_SWITCH_PORT = 'F';
-
+const char ULTRASONIC_OUTPUT = 'G';
+const char ULTRASONIC_INPUT = 'H';
 
 pros::Motor left_wheel (LEFT_WHEEL_PORT,pros::E_MOTOR_GEARSET_18, false,pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_wheel (RIGHT_WHEEL_PORT, pros::E_MOTOR_GEARSET_18, true,pros::E_MOTOR_ENCODER_DEGREES);
@@ -27,6 +28,7 @@ pros::ADIGyro gyro(GYRO_PORT);
 pros::ADIGyro gyro2(GYRO2_PORT);
 pros::ADIEncoder mainEncoder(ENCODER_TOP_PORT,ENCODER_BOT_PORT,true);
 pros::ADIDigitalIn armLimitSwitch(LIMIT_SWITCH_PORT);
+pros::ADIUltrasonic ultrasonic(ULTRASONIC_OUTPUT,ULTRASONIC_INPUT);
 
 bool blueSide = false;
 bool farSide = false;

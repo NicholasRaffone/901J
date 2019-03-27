@@ -18,3 +18,4 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask);
 void move_align(float targetDistance, int maxVelocity);
 void turn_PID(float targetDegree, int maxVelocity);
 void arm_PID(float targetDegree, int maxVelocity);
+void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask); //targetDistance = how far away from wall or object

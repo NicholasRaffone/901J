@@ -248,8 +248,8 @@ void arm_PID(float targetDegree, int maxVelocity){
   double error = 0;
   double previous_error = degreeGoal;
   double kP = 0.7;
-  double kI = 0.0003;
-  double kD = 0.00;
+  double kI = 0.001;
+  double kD = 0.03;
   double integral = 0;
   double derivative = 0;
 
@@ -290,4 +290,61 @@ void arm_PID(float targetDegree, int maxVelocity){
   }
   arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   arm.move_velocity(0);
+}
+
+void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
+
+  const double degreeGoal = targetDistance*10;
+  bool goalMet = false;
+  int targetVelocity = 0;
+  double currentPosition = 0.0;
+  double error = 0;
+  double previous_error = degreeGoal;
+  double kP = 0.75;
+  double kI = 0.0003;
+  double kD = 0.01;
+  double integral = 0;
+  double derivative = 0;
+
+
+  mainEncoder.reset();
+
+  if(multiTask == 1){//setting multitask
+    intake.move_velocity(-200); //intake out
+  } else if (multiTask == 2){
+    intake.move_velocity(200); //intake in
+  } else if (multiTask == 3){
+    angler.move_velocity(-200);
+  } else if (multiTask == 4){
+    angler.move_velocity(200);
+  }
+
+  while(!goalMet){
+    currentPosition = (ultrasonic.get_value()/2.54);
+    error = currentPosition - degreeGoal;
+
+    if (std::abs(error) < degreeGoal*10){
+      integral += error;
+    }
+
+    derivative = error - previous_error;
+    previous_error = error;
+
+    targetVelocity = kP*error + kI*integral + kD*derivative;
+
+    if (targetVelocity > maxVelocity){
+      targetVelocity = maxVelocity;
+    }
+
+    slewRateControl(&left_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&left_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+
+    if (std::abs(error) < 5){
+      goalMet = true;
+    }
+    pros::delay(10);
+  }
+  brakeMotors();
 }

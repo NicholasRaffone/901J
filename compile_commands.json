@@ -133,11 +133,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/auton_functions.cpp.o",
-            "src\\auton_functions.cpp"
+            "bin/opcontrol.cpp.o",
+            "src\\opcontrol.cpp"
         ],
         "directory": "C:\\Users\\josep\\Documents\\PROS\\901J",
-        "file": "src\\auton_functions.cpp"
+        "file": "src\\opcontrol.cpp"
     },
     {
         "arguments": [
@@ -168,10 +168,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/opcontrol.cpp.o",
-            "src\\opcontrol.cpp"
+            "bin/auton_functions.cpp.o",
+            "src\\auton_functions.cpp"
         ],
         "directory": "C:\\Users\\josep\\Documents\\PROS\\901J",
-        "file": "src\\opcontrol.cpp"
+        "file": "src\\auton_functions.cpp"
     }
 ]

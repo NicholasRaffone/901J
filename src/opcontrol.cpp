@@ -130,7 +130,7 @@ turn_PID(90.0,70);
      if (armLimitSwitch.get_value() == 1){ //resets encoder
        arm.tare_position();
      }
-     printf("%d\r\n",armLimitSwitch.get_value());
+     printf("%f\r\n",(ultrasonic.get_value()/2.54));
      /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shootpuncher();
        pros::delay(1000);
@@ -149,8 +149,9 @@ turn_PID(90.0,70);
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-      arm_PID(180.0,200);
-      arm_PID(-180.0,200);
+       move_ultrasonic(10.0,150,0);
+      //arm_PID(180.0,200);
+      //arm_PID(-180.0,200);
 
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
