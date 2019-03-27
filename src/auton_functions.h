@@ -8,6 +8,7 @@ extern const double WHEEL_RADIUS;
 extern const double CIRCUMFERENCE;
 extern const float ENCODERTICKSPERREVOLUTION;
 extern const int DEFAULTSLEWRATEINCREMENT;
+extern const int ARMGEARRATIO;
 
 void brakeMotors();
 void unBrakeMotors();
@@ -16,3 +17,4 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask);
 void park_PID(float targetDistance, int maxVelocity, int multiTask);
 void move_align(float targetDistance, int maxVelocity);
 void turn_PID(float targetDegree, int maxVelocity);
+void arm_PID(float targetDegree, int maxVelocity);

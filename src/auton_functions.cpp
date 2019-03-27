@@ -9,6 +9,7 @@ const double CIRCUMFERENCE = 2*M_PI*WHEEL_RADIUS;
 const double ENCODER_CIRCUMFERENCE = 2*M_PI*ENCODER_WHEEL_RADIUS;
 const float ENCODERTICKSPERREVOLUTION = 360.0;
 const int DEFAULTSLEWRATEINCREMENT = 20;
+const int ARMGEARRATIO = 7;
 
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -221,7 +222,7 @@ void turn_PID(float targetDegree, int maxVelocity){
       leftTarget = targetVelocity;
       rightTarget = -1*targetVelocity;
 
-  
+
     slewRateControl(&left_wheel, leftTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&left_chain, leftTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
@@ -234,4 +235,59 @@ void turn_PID(float targetDegree, int maxVelocity){
     pros::delay(10);
   }
   brakeMotors();
+}
+
+void arm_PID(float targetDegree, int maxVelocity){
+  arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+  const double degreeGoal = (targetDegree*ARMGEARRATIO);
+  bool goalMet = false;
+  bool limitStart = false;
+  int targetVelocity = 0;
+  double currentPosition = 0;
+  double error = 0;
+  double previous_error = degreeGoal;
+  double kP = 0.7;
+  double kI = 0.0003;
+  double kD = 0.00;
+  double integral = 0;
+  double derivative = 0;
+
+  if (targetDegree < 0) {maxVelocity *= -1;}
+  if (armLimitSwitch.get_value() == 1){
+    limitStart = true;
+  }
+  arm.tare_position();
+
+
+  while(!goalMet){
+    currentPosition = arm.get_position();
+    error = degreeGoal - currentPosition;
+
+    if (std::abs(error) < 100){
+      integral += error;
+    }
+
+    derivative = error - previous_error;
+    previous_error = error;
+
+    targetVelocity = kP*error + kI*integral + kD*derivative;
+
+    if (targetVelocity > maxVelocity){
+      targetVelocity = maxVelocity;
+    }
+
+    slewRateControl(&arm, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+
+    if (std::abs(error) < 1){
+      goalMet = true;
+    } else if (armLimitSwitch.get_value() == 1 && !limitStart){ //resets encoder
+      arm.tare_position();
+      goalMet = true;
+    }
+
+    pros::delay(10);
+  }
+  arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  arm.move_velocity(0);
 }

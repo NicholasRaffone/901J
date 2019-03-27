@@ -50,7 +50,7 @@ const int MAXSPEED = 200;
 const int TURNAMT = 150;
 uint32_t encoder_value = 0;
 pros::delay(2000);
-
+/*
 move_PID(50.0,180.0,0);
 turn_PID(180.0,100);
 move_PID(50.0,180.0,0);
@@ -58,18 +58,19 @@ turn_PID(-90.0,100);
 turn_PID(-90.0,90);
 move_PID(50.0,200.0,0);
 move_PID(-40.0,180.0,0);
-pros::delay(150);
-turn_PID(90.0,90);
+pros::delay(300);
+turn_PID(90.0,70);
+*/
 
    while (true) {
 
-     double currentPosition = (gyro.get_value()+gyro2.get_value())/2;
+     /*double currentPosition = (gyro.get_value()+gyro2.get_value())/2;
      printf("gyro avg %f\r\n",currentPosition);
      currentPosition = gyro.get_value();
      printf("gyro 1 %f\r\n",currentPosition);
      currentPosition = gyro2.get_value();
      printf("gyro 2 %f\r\n",currentPosition);
-
+     */
      double power = MAXSPEED * master.get_analog(ANALOG_LEFT_Y) / 127;
      double turn = MAXSPEED * master.get_analog(ANALOG_RIGHT_X) / TURNAMT;//127 max, increase for less turn
 
@@ -126,6 +127,10 @@ turn_PID(90.0,90);
        arm.move_velocity(0);
      }
 
+     if (armLimitSwitch.get_value() == 1){ //resets encoder
+       arm.tare_position();
+     }
+     printf("%d\r\n",armLimitSwitch.get_value());
      /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shootpuncher();
        pros::delay(1000);
@@ -144,7 +149,8 @@ turn_PID(90.0,90);
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-      turn_PID(90.0,90.0);
+      arm_PID(180.0,200);
+      arm_PID(-180.0,200);
 
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
