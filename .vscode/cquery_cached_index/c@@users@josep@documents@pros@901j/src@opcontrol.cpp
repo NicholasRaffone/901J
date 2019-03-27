@@ -149,7 +149,7 @@ turn_PID(90.0,70);
      }
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-       move_ultrasonic(10.0,150,0);
+       move_ultrasonic(10.0,150,5);
       //arm_PID(180.0,200);
       //arm_PID(-180.0,200);
 

@@ -291,6 +291,9 @@ void arm_PID(float targetDegree, int maxVelocity){
   arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   arm.move_velocity(0);
 }
+void arm_stack_task(void* param){
+  arm_PID(-180.0,200);
+}
 
 void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
 
@@ -300,14 +303,14 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
   double currentPosition = 0.0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.75;
-  double kI = 0.0003;
+  double kP = 0.8;
+  double kI = 0.0006;
   double kD = 0.01;
   double integral = 0;
   double derivative = 0;
 
 
-  mainEncoder.reset();
+
 
   if(multiTask == 1){//setting multitask
     intake.move_velocity(-200); //intake out
@@ -317,6 +320,9 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
     angler.move_velocity(-200);
   } else if (multiTask == 4){
     angler.move_velocity(200);
+  } else if (multiTask == 5){
+    std::string text("hello");
+    pros::Task armStacker(arm_stack_task,&text);
   }
 
   while(!goalMet){
@@ -335,6 +341,7 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
     if (targetVelocity > maxVelocity){
       targetVelocity = maxVelocity;
     }
+    printf("%f\r\n",(ultrasonic.get_value()/2.54));
 
     slewRateControl(&left_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&left_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
