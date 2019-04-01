@@ -113,43 +113,41 @@ void bluefar_park(){
 }
 
 void autonSelector(){
-   if(blueSide == false)//if red
-   {
-     if(farSide == false){
-       if(park){
-          redclose_park();
-        }
-        else{
-          redclose_nopark();
-        }
-     }
-       else{ //far side
-         if(park){
-            redfar_park();
-          }
-          else{
-            redfar_nopark();
-          }
-     }
-   }
- else {//blue side chosen
-   if(farSide == false){
-     if(park){
-        blueclose_park();
-      }
-      else{
-        blueclose_nopark();
-      }
-   }
-     else{ //far side
-       if(park){
-          bluefar_park();
-        }
-        else{
-          bluefar_nopark();
-        }
-   }
- }
+  bool list[3] = {blueSide, farSide, park}; //1, 2, 4
+  int list2[3] = {1,2,4};
+  int total = 0;
+  for(int i = 0; i < 2; i++){
+    if(list[i] == true){
+      total += list2[i];
+    }
+  }
+
+  switch (total) {
+    case 1: //t f f
+      blueclose_nopark();
+      break;
+    case 2: //f t f
+      redfar_nopark();
+      break;
+    case 3: //t t f
+      bluefar_nopark();
+      break;
+    case 4: //f f t
+      redclose_park();
+      break;
+    case 5: //t f t
+      blueclose_park();
+      break;
+    case 6: //f t t
+      redfar_park();
+      break;
+    case 7: //t t t
+      bluefar_park();
+      break;
+    default ://when 0 (f f f)
+      redclose_nopark();
+  }
+
 }
 
 void autonomous() {

@@ -30,6 +30,6 @@ pros::ADIEncoder mainEncoder(ENCODER_TOP_PORT,ENCODER_BOT_PORT,true);
 pros::ADIDigitalIn armLimitSwitch(LIMIT_SWITCH_PORT);
 pros::ADIUltrasonic ultrasonic(ULTRASONIC_OUTPUT,ULTRASONIC_INPUT);
 
-bool blueSide = false;
-bool farSide = false;
-bool park = true;
+bool blueSide = false; // 1
+bool farSide = false; // 2
+bool park = true; // 4
