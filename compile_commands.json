@@ -121,11 +121,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/opcontrol.cpp.o",
-            "src/opcontrol.cpp"
+            "bin/config.cpp.o",
+            "src/config.cpp"
         ],
         "directory": "/Users/raffonen/Documents/test",
-        "file": "src/opcontrol.cpp"
+        "file": "src/config.cpp"
     },
     {
         "arguments": [
@@ -153,10 +153,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/config.cpp.o",
-            "src/config.cpp"
+            "bin/opcontrol.cpp.o",
+            "src/opcontrol.cpp"
         ],
         "directory": "/Users/raffonen/Documents/test",
-        "file": "src/config.cpp"
+        "file": "src/opcontrol.cpp"
     }
 ]

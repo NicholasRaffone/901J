@@ -116,13 +116,11 @@ turn_PID(90.0,70);
        angler.move_velocity(0);
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
-       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       arm.move_velocity(-MAXSPEED);
+       slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
-       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       arm.move_velocity(MAXSPEED);
+       slewRateControl(&arm,-200,DEFAULTSLEWRATEINCREMENT);
      }else{
-       arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+       arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
        arm.move_velocity(0);
      }
 
@@ -139,9 +137,9 @@ turn_PID(90.0,70);
        pros::delay(1000);
      }**/
      if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
-       puncher.move_velocity(-MAXSPEED);
+       slewRateControl(&puncher,-200,DEFAULTSLEWRATEINCREMENT);
      } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
-       puncher.move_velocity(MAXSPEED);
+       slewRateControl(&puncher,200,DEFAULTSLEWRATEINCREMENT);
      } else{
        puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
        puncher.move_velocity(0);
