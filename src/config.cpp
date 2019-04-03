@@ -22,7 +22,7 @@ pros::Motor right_chain (RIGHT_CHAIN_PORT, pros::E_MOTOR_GEARSET_18, true,pros::
 pros::Controller master (CONTROLLER_MASTER);
 pros::Motor arm(ARM_MOTOR_PORT,pros::E_MOTOR_GEARSET_18,false,pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor intake(INTAKE_MOTOR_PORT,pros::E_MOTOR_GEARSET_18, false,pros::E_MOTOR_ENCODER_DEGREES);
-pros::Motor puncher(PUNCHER_MOTOR_PORT,pros::E_MOTOR_GEARSET_18,true,pros::E_MOTOR_ENCODER_DEGREES);
+pros::Motor puncher(PUNCHER_MOTOR_PORT,pros::E_MOTOR_GEARSET_18,false,pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor angler(ANGLER_MOTOR_PORT, pros::E_MOTOR_GEARSET_18, false,pros::E_MOTOR_ENCODER_DEGREES);
 pros::ADIGyro gyro(GYRO_PORT);
 pros::ADIGyro gyro2(GYRO2_PORT);
