@@ -49,7 +49,6 @@ void opcontrol() {
 const int MAXSPEED = 200;
 const int TURNAMT = 150;
 uint32_t encoder_value = 0;
-pros::delay(2000);
 /*
 move_PID(50.0,180.0,0);
 turn_PID(180.0,100);

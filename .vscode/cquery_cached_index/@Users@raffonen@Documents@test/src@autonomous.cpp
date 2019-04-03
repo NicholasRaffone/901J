@@ -1,8 +1,8 @@
 #include "main.h"
 #include "config.hpp"
 #include "config.hpp"
+#include "auton_functions.h"
 
-const double WHEEL_RADIUS = 5.08;
 /**
  * Runs the user autonomous code. This function will be started in its own task
  * with the default priority and stack size whenever the robot is enabled via
@@ -14,22 +14,24 @@ const double WHEEL_RADIUS = 5.08;
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
- static void unBrakeMotors(){
-   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+
+
+ void angle(bool up){
+   if(up){
+     angler.move_relative(-75,1000);
+   }else{
+     angler.move_relative(75,1000);
+   }
+   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+   angler.move_velocity(0);
  }
- static void brakeMotors(){//brake the base motors
-   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   left_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   right_chain.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   left_wheel.move_velocity(0);
-   left_chain.move_velocity(0);
-   right_wheel.move_velocity(0);
-   right_chain.move_velocity(0);
+
+ void intakeball(){
+   intake.move_relative(500,1000);
+   angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+   angler.move_velocity(0);
  }
+
 /*
  void turnP(double goal){//simple gyro turn function (positive to right)
    gyro.reset();//sets gyro value to 0
@@ -51,65 +53,8 @@ const double WHEEL_RADIUS = 5.08;
    unBrakeMotors();
  }
 
-
-
-  void moveP(double distance, int multi){
-   double circumference = 5.08 * 2.0 * M_PI;
-   double goal = (distance/circumference)*360.0; //make error into degrees
-
-   double Kp = 0.5;
-   double speed;
-
-   right_wheel.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);//sets wheels to encode in degrees
-   right_chain.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-   left_wheel.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-   left_chain.set_encoder_units(pros::E_MOTOR_ENCODER_DEGREES);
-
-   right_wheel.tare_position();//sets encoders position to 0 degrees
-   right_chain.tare_position();
-   left_wheel.tare_position();
-   left_chain.tare_position();
-   double encoderavg = (right_wheel.get_position() + right_chain.get_position() +  left_wheel.get_position()
-                             + left_chain.get_position())/4;
-   double error = goal - encoderavg;
-
-   while(error != 0){
-     speed = error * Kp;
-
-     if(speed > 200){//sets max speed to +/- 200
-       speed = 200;
-     }else if (speed < -200){
-       speed = -200;
-     }
-
-     if(multi == 1){//setting multitask
-       intake.move_velocity(-200); //intake out
-     } else if (multi == 2){
-       intake.move_velocity(200); //intake in
-     } else if (multi == 3){
-       angler.move_velocity(-200);
-     } else if (multi == 4){
-       angler.move_velocity(200);
-     }
-     left_wheel.move_velocity(speed);
-     left_chain.move_velocity(speed);
-     right_wheel.move_velocity(speed);
-     right_chain.move_velocity(speed);
-     encoderavg = (right_wheel.get_position() + right_chain.get_position() +  left_wheel.get_position()
-                               + left_chain.get_position())/4;
-     error = goal - encoderavg;//recalculate error
-     pros::delay(2); //don't hog cpu
-   }
-
-   brakeMotors();
-   unBrakeMotors();
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   angler.move_velocity(0);
-   intake.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   intake.move_velocity(0);
-
  }*/
-void redclose(){
+void redclose_nopark(){
   /**
     looking at close flag
     angle down
@@ -124,51 +69,87 @@ void redclose(){
     punch top flag
     straight toggle low flag
     back one tile
-    if park, back onto platform tile, turn right 90, straight onto platform
-    if not, turn 90 degrees right, intake out and straight
+    turn 90 degrees right, intake out and straight
   **/
 }
 
-void redfar(){
+void redclose_park(){
+  /**
+  **/
+}
+
+void redfar_nopark(){
   /**
 
   **/
 
 }
 
-void blueclose(){
+void redfar_park(){
+  /**
+
+  **/
+
+}
+
+void blueclose_nopark(){
   /**
   **/
 }
 
-void bluefar(){
+void blueclose_park(){
+  /**
+  **/
+}
+
+void bluefar_nopark(){
+  /**
+  **/
+}
+
+void bluefar_park(){
   /**
   **/
 }
 
 void autonSelector(){
-   if(blueSide == false)//if red
-   {
-     if(farSide == false){
-          redclose();
-     }
-       else{ //far side
-          redfar();
-     }
-   }
- else {//blue side chosen
-   if(farSide == false){
-      blueclose();
-   }
-     else{ //far side
-      bluefar();
-   }
- }
+  bool list[3] = {blueSide, farSide, park}; //1, 2, 4
+  int list2[3] = {1,2,4};
+  int total = 0;
+  for(int i = 0; i < 2; i++){
+    if(list[i] == true){
+      total += list2[i];
+    }
+  }
+
+  switch (total) {
+    case 1: //t f f
+      blueclose_nopark();
+      break;
+    case 2: //f t f
+      redfar_nopark();
+      break;
+    case 3: //t t f
+      bluefar_nopark();
+      break;
+    case 4: //f f t
+      redclose_park();
+      break;
+    case 5: //t f t
+      blueclose_park();
+      break;
+    case 6: //f t t
+      redfar_park();
+      break;
+    case 7: //t t t
+      bluefar_park();
+      break;
+    default ://when 0 (f f f)
+      redclose_nopark();
+  }
+
 }
-/*void tempauton(){
-  moveP(60.0, 1); //move one tile while intake out
-  turnP(90.0);//turn 90 degrees to the right
-}*/
+
 void autonomous() {
   autonSelector();
   //tempauton();
