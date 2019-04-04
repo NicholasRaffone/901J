@@ -31,24 +31,66 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
-
+void puncherDelay(int target){
+  while (!((puncher.get_position() < target+5) && (puncher.get_position() > target-5))) {
+   // Continue running this loop as long as the motor is not within +-5 units of its goal
+   pros::delay(10);
+ }
+}
 void setpuncher(){
-  puncher.move_relative(-263,1000);
+  puncher.tare_position();
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
 }
 void shootpuncher(){
-  puncher.move_relative(-80,1000);
+  puncher.tare_position();
+  puncher.move_absolute(180,200);
+  puncherDelay(180);
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
+}
+
+void doublePunch(){
+  puncher.tare_position();
+  puncher.move_absolute(180,200);
+  puncherDelay(180);
+  angler.move_velocity(-170);
+  intake.move_velocity(-200);
+  puncher.move_absolute(180,200);
+  puncherDelay(180);
+ pros::delay(250);
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
+
 }
 
 
+void puncher_task(void* param){
+  while(true){
+    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
+      //slewRateControl(&puncher,-200,30);
+      shootpuncher();
+    } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
+      //slewRateControl(&puncher,200,30);
+      doublePunch();
+    } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) != 0){
+      setpuncher();
+    } else {
+      puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+      puncher.move_velocity(0);
+    }
+    pros::delay(5);
+  }
 
-
-
+}
 
 
 void opcontrol() {
 const int MAXSPEED = 200;
 const int TURNAMT = 150;
 uint32_t encoder_value = 0;
+std::string text("puncher");
+pros::Task punchTask(puncher_task,&text);
 /*
 move_PID(50.0,180.0,0);
 turn_PID(180.0,100);
@@ -116,11 +158,9 @@ turn_PID(90.0,70);
        angler.move_velocity(0);
      }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
-       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       arm.move_velocity(-MAXSPEED);
+       slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
-       arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       arm.move_velocity(MAXSPEED);
+       slewRateControl(&arm,-200,DEFAULTSLEWRATEINCREMENT);
      }else{
        arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
        arm.move_velocity(0);
@@ -129,7 +169,7 @@ turn_PID(90.0,70);
      if (armLimitSwitch.get_value() == 1){ //resets encoder
        arm.tare_position();
      }
-     printf("%f\r\n",(ultrasonic.get_value()/2.54));
+
      /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shootpuncher();
        pros::delay(1000);
@@ -138,14 +178,7 @@ turn_PID(90.0,70);
        setpuncher();
        pros::delay(1000);
      }**/
-     if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
-       puncher.move_velocity(-MAXSPEED);
-     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
-       puncher.move_velocity(MAXSPEED);
-     } else{
-       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       puncher.move_velocity(0);
-     }
+
 
      if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
        move_ultrasonic(10.0,150,5);

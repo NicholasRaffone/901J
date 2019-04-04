@@ -72,7 +72,7 @@ void puncher_task(void* param){
       shootpuncher();
     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
       //slewRateControl(&puncher,200,30);
-      doublePunch;
+      doublePunch();
     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) != 0){
       setpuncher();
     } else {
