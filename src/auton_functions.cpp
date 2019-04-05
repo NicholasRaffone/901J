@@ -11,6 +11,37 @@ const float ENCODERTICKSPERREVOLUTION = 360.0;
 const int DEFAULTSLEWRATEINCREMENT = 20;
 const int ARMGEARRATIO = 7;
 
+void move_puncher(int target){
+  puncher.tare_position();
+  bool override = false;
+  while (!((puncher.get_position() < target+10) && (puncher.get_position() > target-10)) || override) {
+  slewRateControl(&puncher,200,DEFAULTSLEWRATEINCREMENT);
+   pros::delay(5);
+   if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0){
+     override = true;
+   }
+ }
+}
+void setpuncher(){
+  move_puncher(200);
+}
+void shootpuncher(){
+  move_puncher(190);
+  pros::delay(100);
+  move_puncher(190);
+}
+
+void doublePunch(){
+  move_puncher(180);
+  angler.move_velocity(-170);
+  intake.move_velocity(200);
+  move_puncher(200);
+  pros::delay(200);
+  move_puncher(200);
+  pros::delay(100);
+  move_puncher(200);
+}
+
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -187,7 +218,7 @@ void turn_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.3;
+  double kP = 0.15;
   double kI = 0.0002;
   double kD = 0.00;
   double integral = 0;
@@ -200,8 +231,8 @@ void turn_PID(float targetDegree, int maxVelocity){
   while(!goalMet){
     currentPosition = (gyro.get_value()+gyro2.get_value())/2;
     error = degreeGoal - currentPosition;
-    // printf("%f\r\n",currentPosition);
-    if (std::abs(error) < 360){
+    printf("%f\r\n",currentPosition);
+    if (std::abs(error) < 450){
       integral += error;
     }
     printf("gyro avg %f\r\n",currentPosition);
@@ -228,7 +259,7 @@ void turn_PID(float targetDegree, int maxVelocity){
     slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_chain, rightTarget, DEFAULTSLEWRATEINCREMENT);
 
-    if (std::abs(error) < 15){
+    if (std::abs(error) < 6){
       goalMet = true;
     }
 

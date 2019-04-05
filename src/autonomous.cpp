@@ -16,103 +16,155 @@
  */
 
 
- void angle(bool up){
-   if(up){
-     angler.move_relative(-75,1000);
-   }else{
-     angler.move_relative(75,1000);
-   }
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   angler.move_velocity(0);
- }
-
  void intakeball(){
    intake.move_relative(500,1000);
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   angler.move_velocity(0);
+   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+   intake.move_velocity(0);
  }
-
-/*
- void turnP(double goal){//simple gyro turn function (positive to right)
-   gyro.reset();//sets gyro value to 0
-   double error = goal - gyro.get_value() / 10.0;
-   double Kp = 0.6;
-   int velocity;
-   if (goal < 0 && velocity > 0) { velocity *= -1.0; }
-   while(error != 0.0){//while there is error
-       velocity = error * Kp;
-       left_wheel.move_velocity(velocity);
-       left_chain.move_velocity(velocity);
-       right_wheel.move_velocity(-1*velocity);
-       right_chain.move_velocity(-1*velocity);
-
-     error = goal - gyro.get_value()/ 10.0;
-     pros::delay(2);
-   }//stops movement after turn
-   brakeMotors();
-   unBrakeMotors();
- }
-
- }*/
 void redclose_nopark(){
-  /**
-    looking at close flag
-    angle down
-    punch mid flag
-    angle up
-    turn right 90
-    straight
-    intake ball
-    go back onto wall
-    foward a bit
-    turn left 90
-    punch top flag
-    straight toggle low flag
-    back one tile
-    turn 90 degrees right, intake out and straight
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  pros::delay(1000);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-32, 150, 0);
+  park_PID(4, 100, 0);
+  turn_PID(-90, 65);
+  doublePunch();
+  park_PID(39, 150, 1);
+  brakeMotors();
+  pros::delay(500);
+  unBrakeMotors();
 }
 
 void redclose_park(){
-  /**
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-32, 150, 0);
+  park_PID(4, 100, 0);
+  turn_PID(-90, 65);
+  doublePunch();
+  park_PID(-20,100,0);
+  turn_PID(90,65);
+  park_PID(36,200,1);
+  brakeMotors();
+  unBrakeMotors();
 }
 
 void redfar_nopark(){
-  /**
-
-  **/
-
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  turn_PID(-85, 65);
+  pros::delay(5000);
+  doublePunch();
+  brakeMotors();
+  unBrakeMotors();
 }
 
 void redfar_park(){
-  /**
-
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  turn_PID(-85, 65);
+  pros::delay(5000);
+  doublePunch();
+  turn_PID(85, 65);
+  park_PID(-5,65,0);
+  turn_PID(-90,65);
+  park_PID(10,200,1);
+  brakeMotors();
+  pros::delay(500);
+  unBrakeMotors();
 
 }
 
 void blueclose_nopark(){
-  /**
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-32, 150, 0);
+  park_PID(4, 100, 0);
+  turn_PID(90, 65);
+  doublePunch();
+  park_PID(39, 150, 1);
 }
 
 void blueclose_park(){
-  /**
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-32, 150, 0);
+  park_PID(4, 100, 0);
+  turn_PID(90, 65);
+  doublePunch();
+  park_PID(-20,100,0);
+  turn_PID(-90,65);
+  park_PID(36,200,1);
+  brakeMotors();
+  unBrakeMotors();
 }
 
 void bluefar_nopark(){
-  /**
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  turn_PID(85, 65);
+  pros::delay(5000);
+  doublePunch();
+  brakeMotors();
+  unBrakeMotors();
 }
 
 void bluefar_park(){
-  /**
-  **/
+  setpuncher();
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  turn_PID(85, 65);
+  pros::delay(5000);
+  doublePunch();
+  turn_PID(-85, 65);
+  park_PID(-5,65,0);
+  turn_PID(90,65);
+  park_PID(10,200,1);
+  brakeMotors();
+  pros::delay(500);
+  unBrakeMotors();
 }
 
-void autonSelector(){
+void autonomous(){
   bool list[3] = {blueSide, farSide, park}; //1, 2, 4
   int list2[3] = {1,2,4};
   int total = 0;
@@ -148,9 +200,4 @@ void autonSelector(){
       redclose_nopark();
   }
 
-}
-
-void autonomous() {
-  autonSelector();
-  //tempauton();
 }

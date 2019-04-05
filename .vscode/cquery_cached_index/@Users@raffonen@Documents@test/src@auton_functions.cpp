@@ -11,6 +11,46 @@ const float ENCODERTICKSPERREVOLUTION = 360.0;
 const int DEFAULTSLEWRATEINCREMENT = 20;
 const int ARMGEARRATIO = 7;
 
+void puncherDelay(int target){
+  while (!((puncher.get_position() < target+15) && (puncher.get_position() > target-12))) {
+   // Continue running this loop as long as the motor is not within +-5 units of its goal
+   pros::delay(5);
+ }
+}
+void setpuncher(){
+  puncher.tare_position();
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
+}
+void shootpuncher(){
+  puncher.tare_position();
+  puncher.move_absolute(200,200);
+  puncherDelay(180);
+  pros::delay(100);
+  puncher.tare_position();
+  puncher.move_absolute(210,200);
+  puncherDelay(200);
+}
+
+void doublePunch(){
+  puncher.tare_position();
+  puncher.move_absolute(180,200);
+  puncherDelay(180);
+  angler.move_velocity(-170);
+  intake.move_velocity(200);
+  puncher.tare_position();
+  puncher.move_absolute(180,200);
+  puncherDelay(180);
+  pros::delay(200);
+  puncher.tare_position();
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
+  pros::delay(100);
+  puncher.tare_position();
+  puncher.move_absolute(200,200);
+  puncherDelay(200);
+}
+
 void brakeMotors(){//brake the base motors
   left_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   right_wheel.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
@@ -187,7 +227,7 @@ void turn_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.3;
+  double kP = 0.15;
   double kI = 0.0002;
   double kD = 0.00;
   double integral = 0;
@@ -200,8 +240,8 @@ void turn_PID(float targetDegree, int maxVelocity){
   while(!goalMet){
     currentPosition = (gyro.get_value()+gyro2.get_value())/2;
     error = degreeGoal - currentPosition;
-    // printf("%f\r\n",currentPosition);
-    if (std::abs(error) < 360){
+    printf("%f\r\n",currentPosition);
+    if (std::abs(error) < 450){
       integral += error;
     }
     printf("gyro avg %f\r\n",currentPosition);
@@ -228,7 +268,7 @@ void turn_PID(float targetDegree, int maxVelocity){
     slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_chain, rightTarget, DEFAULTSLEWRATEINCREMENT);
 
-    if (std::abs(error) < 15){
+    if (std::abs(error) < 6){
       goalMet = true;
     }
 

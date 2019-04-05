@@ -16,20 +16,10 @@
  */
 
 
- void angle(bool up){
-   if(up){
-     angler.move_relative(-75,1000);
-   }else{
-     angler.move_relative(75,1000);
-   }
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-   angler.move_velocity(0);
- }
-
  void intakeball(){
    intake.move_relative(500,1000);
-   angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-   angler.move_velocity(0);
+   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+   intake.move_velocity(0);
  }
 
 /*
@@ -41,48 +31,54 @@
    if (goal < 0 && velocity > 0) { velocity *= -1.0; }
    while(error != 0.0){//while there is error
        velocity = error * Kp;
-       left_wheel.move_velocity(velocity);
-       left_chain.move_velocity(velocity);
-       right_wheel.move_velocity(-1*velocity);
-       right_chain.move_velocity(-1*velocity);
+       left_wheel.park_velocity(velocity);
+       left_chain.park_velocity(velocity);
+       right_wheel.park_velocity(-1*velocity);
+       right_chain.park_velocity(-1*velocity);
 
      error = goal - gyro.get_value()/ 10.0;
      pros::delay(2);
-   }//stops movement after turn
+   }//stops parkment after turn
    brakeMotors();
    unBrakeMotors();
  }
 
  }*/
 void redclose_nopark(){
-  /**
-    looking at close flag
-    angle down
-    punch mid flag
-    angle up
-    turn right 90
-    straight
-    intake ball
-    go back onto wall
-    foward a bit
-    turn left 90
-    punch top flag
-    straight toggle low flag
-    back one tile
-    turn 90 degrees right, intake out and straight
-  **/
+  setpuncher();
+  park_PID(29, 150, 2);
+  park_PID(-3, 50, 2);
+  pros::delay(500);
+  intakeball();
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-32, 150, 2);
+  park_PID(4, 100, 2);
+  turn_PID(-90, 65);
+  doublePunch();
+  park_PID(36, 150, 1);
 }
 
 void redclose_park(){
-  /**
-  **/
+  setpuncher();
+  park_PID(60, 150, 2);
+  park_PID(-3, 50, 2);
+  intakeball();
+  turn_PID(-90, 100);
+  intake.move_velocity(-50);
+  doublePunch();
+  park_PID(-30, 150, 1);
+  turn_PID(90, 100);
+  park_PID(45, 200, 1);
+  pros::delay(100);
+  park_PID(45, 200, 1);
+  brakeMotors();
+  unBrakeMotors();
 }
 
 void redfar_nopark(){
-  /**
 
-  **/
-
+  park_PID(60, 150, 1);
 }
 
 void redfar_park(){

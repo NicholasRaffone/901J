@@ -31,42 +31,11 @@
  pros::Controller master (CONTROLLER_MASTER);
 **/
 
-void puncherDelay(int target){
-  while (!((puncher.get_position() < target+5) && (puncher.get_position() > target-5))) {
-   // Continue running this loop as long as the motor is not within +-5 units of its goal
-   pros::delay(10);
- }
-}
-void setpuncher(){
-  puncher.tare_position();
-  puncher.move_absolute(200,200);
-  puncherDelay(200);
-}
-void shootpuncher(){
-  puncher.tare_position();
-  puncher.move_absolute(180,200);
-  puncherDelay(180);
-  puncher.move_absolute(200,200);
-  puncherDelay(200);
-}
-
-void doublePunch(){
-  puncher.tare_position();
-  puncher.move_absolute(180,200);
-  puncherDelay(180);
-  angler.move_velocity(-170);
-  intake.move_velocity(-200);
-  puncher.move_absolute(180,200);
-  puncherDelay(180);
- pros::delay(250);
-  puncher.move_absolute(200,200);
-  puncherDelay(200);
-
-}
-
-
 void puncher_task(void* param){
+  const int MAXSPEED = 200;
+
   while(true){
+
     if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
       //slewRateControl(&puncher,-200,30);
       shootpuncher();
@@ -78,6 +47,24 @@ void puncher_task(void* param){
     } else {
       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
       puncher.move_velocity(0);
+    }
+    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
+      intake.move_velocity(-MAXSPEED);
+    } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
+      intake.move_velocity(MAXSPEED);
+    } else{
+      intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+      intake.move_velocity(0);
+    }
+    if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
+      angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+      angler.move_velocity(-MAXSPEED);
+    } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
+      angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+      angler.move_velocity(MAXSPEED);
+    } else{
+      //angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+      angler.move_velocity(0);
     }
     pros::delay(5);
   }
@@ -139,24 +126,7 @@ turn_PID(90.0,70);
      slewRateControl(&right_wheel, right);
      slewRateControl(&right_chain, right);
      **/
-     if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R1) != 0){
-       intake.move_velocity(-MAXSPEED);
-     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_R2) != 0){
-       intake.move_velocity(MAXSPEED);
-     } else{
-       intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       intake.move_velocity(0);
-     }
-     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_UP) != 0){
-       angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       angler.move_velocity(-MAXSPEED);
-     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_DOWN) != 0){
-       angler.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-       angler.move_velocity(MAXSPEED);
-     } else{
-       //angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-       angler.move_velocity(0);
-     }
+
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
        slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
      } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
