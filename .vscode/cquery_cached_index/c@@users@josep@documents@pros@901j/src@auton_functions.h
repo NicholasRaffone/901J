@@ -10,6 +10,10 @@ extern const float ENCODERTICKSPERREVOLUTION;
 extern const int DEFAULTSLEWRATEINCREMENT;
 extern const int ARMGEARRATIO;
 
+void puncherDelay(int target);
+void setpuncher();
+void shootpuncher();
+void doublePunch();
 void brakeMotors();
 void unBrakeMotors();
 void slewRateControl(pros::Motor *motor, int targetVelocity, int increment);

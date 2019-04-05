@@ -14,8 +14,8 @@ const int ARMGEARRATIO = 7;
 void move_puncher(int target){
   puncher.tare_position();
   bool override = false;
-  while (!((puncher.get_position() < target+10) && (puncher.get_position() > target-10)) || override) {
-  slewRateControl(&puncher,200,DEFAULTSLEWRATEINCREMENT);
+  while (!(puncher.get_position() > target) || !override) {
+  slewRateControl(&puncher,200,30);
    pros::delay(5);
    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0){
      override = true;
@@ -23,10 +23,10 @@ void move_puncher(int target){
  }
 }
 void setpuncher(){
-  move_puncher(200);
+  move_puncher(190);
 }
 void shootpuncher(){
-  move_puncher(190);
+  move_puncher(180);
   pros::delay(100);
   move_puncher(190);
 }
@@ -35,11 +35,11 @@ void doublePunch(){
   move_puncher(180);
   angler.move_velocity(-170);
   intake.move_velocity(200);
-  move_puncher(200);
+  move_puncher(190);
   pros::delay(200);
-  move_puncher(200);
+  move_puncher(180);
   pros::delay(100);
-  move_puncher(200);
+  move_puncher(190);
 }
 
 void brakeMotors(){//brake the base motors
