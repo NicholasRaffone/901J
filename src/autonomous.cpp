@@ -14,20 +14,37 @@
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-
-
  void intakeball(){
-   intake.move_relative(500,1000);
+   intake.move_voltage(12000);
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+ }
+ void auton_task(void* param){
+   setpuncher();
+   shootpuncher();
+   pros::delay(100);
+   park_PID(35.0, 100, 2);
+
+  /* setpuncher();
+   park_PID(30.5, 150, 2);
+   park_PID(-3, 50, 2);
+   pros::delay(500);
+   intakeball();
    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
    intake.move_velocity(0);
+   park_PID(-32, 150, 0);
+   park_PID(4, 100, 0);
+   turn_PID(90, 65);
+   doublePunch();
+   park_PID(39, 150, 1);
+   */
  }
+
 void redclose_nopark(){
   setpuncher();
   park_PID(30.5, 150, 2);
   pros::delay(1000);
   park_PID(-3, 50, 2);
   pros::delay(500);
-  intakeball();
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-32, 150, 0);
@@ -45,7 +62,6 @@ void redclose_park(){
   park_PID(30.5, 150, 2);
   park_PID(-3, 50, 2);
   pros::delay(500);
-  intakeball();
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-32, 150, 0);
@@ -96,18 +112,9 @@ void redfar_park(){
 }
 
 void blueclose_nopark(){
-  setpuncher();
-  park_PID(30.5, 150, 2);
-  park_PID(-3, 50, 2);
-  pros::delay(500);
-  intakeball();
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  intake.move_velocity(0);
-  park_PID(-32, 150, 0);
-  park_PID(4, 100, 0);
-  turn_PID(90, 65);
-  doublePunch();
-  park_PID(39, 150, 1);
+  std::string text("hello");
+  pros::Task armStacker(auton_task,&text);
+
 }
 
 void blueclose_park(){

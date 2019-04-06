@@ -14,32 +14,34 @@ const int ARMGEARRATIO = 7;
 void move_puncher(int target){
   puncher.tare_position();
   bool override = false;
-  while (!(puncher.get_position() > target) || !override) {
-  slewRateControl(&puncher,200,30);
+  while (!(puncher.get_position() > target) && !override) {
+  puncher.move_voltage(12000);
    pros::delay(5);
    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0){
      override = true;
    }
  }
+ puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+ puncher.move_velocity(0);
 }
 void setpuncher(){
-  move_puncher(190);
+  move_puncher(170);
 }
 void shootpuncher(){
-  move_puncher(180);
+  move_puncher(175);
   pros::delay(100);
-  move_puncher(190);
+  move_puncher(170);
 }
 
 void doublePunch(){
-  move_puncher(180);
+  move_puncher(175);
   angler.move_velocity(-170);
-  intake.move_velocity(200);
-  move_puncher(190);
-  pros::delay(200);
-  move_puncher(180);
+  intake.move_velocity(250);
+  move_puncher(170);
+  pros::delay(400);
+  move_puncher(175);
   pros::delay(100);
-  move_puncher(190);
+  move_puncher(170);
 }
 
 void brakeMotors(){//brake the base motors
@@ -156,7 +158,7 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
   if(multiTask == 1){//setting multitask
     intake.move_velocity(-200); //intake out
   } else if (multiTask == 2){
-    intake.move_velocity(200); //intake in
+    intake.move_voltage(12000); //intake in
   } else if (multiTask == 3){
     angler.move_velocity(-200);
   } else if (multiTask == 4){

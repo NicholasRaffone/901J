@@ -39,12 +39,15 @@ void puncher_task(void* param){
     if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) != 0){
       //slewRateControl(&puncher,-200,30);
       shootpuncher();
+
     } else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_L2) != 0){
       //slewRateControl(&puncher,200,30);
       doublePunch();
+
     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_LEFT) != 0){
       setpuncher();
-    }else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0){
+
+    }else if((master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0) || master.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
       puncher.move_velocity(200);
       }else {
       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -152,12 +155,7 @@ turn_PID(90.0,70);
      }**/
 
 
-     if  (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) == 1){
-       move_ultrasonic(10.0,150,5);
-      //arm_PID(180.0,200);
-      //arm_PID(-180.0,200);
 
-     }
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){
        brakeMotors();
      }else{
