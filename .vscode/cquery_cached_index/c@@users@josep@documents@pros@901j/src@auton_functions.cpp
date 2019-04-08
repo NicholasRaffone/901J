@@ -14,32 +14,34 @@ const int ARMGEARRATIO = 7;
 void move_puncher(int target){
   puncher.tare_position();
   bool override = false;
-  while (!(puncher.get_position() > target) || !override) {
-  slewRateControl(&puncher,200,30);
+  while (!(puncher.get_position() > target) && !override) {
+  puncher.move_voltage(12000);
    pros::delay(5);
    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0){
      override = true;
    }
  }
+ puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+ puncher.move_velocity(0);
 }
 void setpuncher(){
-  move_puncher(190);
+  move_puncher(165);
 }
 void shootpuncher(){
-  move_puncher(180);
+  move_puncher(165);
   pros::delay(100);
-  move_puncher(190);
+  move_puncher(165);
 }
 
 void doublePunch(){
-  move_puncher(180);
+  move_puncher(165);
   angler.move_velocity(-170);
-  intake.move_velocity(200);
-  move_puncher(190);
-  pros::delay(200);
-  move_puncher(180);
+  intake.move_velocity(250);
+  move_puncher(165);
+  pros::delay(400);
+  move_puncher(165);
   pros::delay(100);
-  move_puncher(190);
+  move_puncher(165);
 }
 
 void brakeMotors(){//brake the base motors
@@ -134,18 +136,20 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   }
   brakeMotors();
 }
-
+void arm_stack_task(void* param){
+  arm_PID(90,200);
+}
 void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEELS
 
   const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION;
-  bool goalMet = false;
+  bool goalMet = false; bool oneTime = true;
   int targetVelocity = 0;
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
   double kP = 0.42;
   double kI = 0.0004;
-  double kD = 0.05;
+  double kD = 0.001;
   double integral = 0;
   double derivative = 0;
 
@@ -156,14 +160,18 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
   if(multiTask == 1){//setting multitask
     intake.move_velocity(-200); //intake out
   } else if (multiTask == 2){
-    intake.move_velocity(200); //intake in
+    intake.move_voltage(12000); //intake in
   } else if (multiTask == 3){
     angler.move_velocity(-200);
   } else if (multiTask == 4){
     angler.move_velocity(200);
-  }
+  } else
 
   while(!goalMet){
+
+
+
+
     currentPosition = (right_chain.get_position() + left_chain.get_position())/2.0;
     error = degreeGoal - currentPosition;
 
@@ -188,8 +196,17 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
     if (std::abs(error) < 10){
       goalMet = true;
     }
+
+
+    if (multiTask == 5 && error < 300 && oneTime){
+      std::string text("arm");
+      pros::Task armStacker(arm_stack_task,&text);
+      oneTime = false;
+    }
+
     pros::delay(10);
   }
+
   brakeMotors();
 }
 
@@ -232,7 +249,7 @@ void turn_PID(float targetDegree, int maxVelocity){
     currentPosition = (gyro.get_value()+gyro2.get_value())/2;
     error = degreeGoal - currentPosition;
     printf("%f\r\n",currentPosition);
-    if (std::abs(error) < 450){
+    if (std::abs(error) < 1000){
       integral += error;
     }
     printf("gyro avg %f\r\n",currentPosition);
@@ -322,9 +339,7 @@ void arm_PID(float targetDegree, int maxVelocity){
   arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
   arm.move_velocity(0);
 }
-void arm_stack_task(void* param){
-  arm_PID(-180.0,200);
-}
+
 
 void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
 
@@ -351,11 +366,7 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
     angler.move_velocity(-200);
   } else if (multiTask == 4){
     angler.move_velocity(200);
-  } else if (multiTask == 5){
-    std::string text("hello");
-    pros::Task armStacker(arm_stack_task,&text);
   }
-
   while(!goalMet){
     currentPosition = (ultrasonic.get_value()/2.54);
     error = currentPosition - degreeGoal;
