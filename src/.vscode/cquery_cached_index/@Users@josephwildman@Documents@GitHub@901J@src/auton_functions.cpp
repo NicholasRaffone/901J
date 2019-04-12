@@ -25,23 +25,23 @@ void move_puncher(int target){
  puncher.move_velocity(0);
 }
 void setpuncher(){
-  move_puncher(165);
+  move_puncher(155);
 }
 void shootpuncher(){
-  move_puncher(165);
+  move_puncher(160);
   pros::delay(100);
-  move_puncher(165);
+  move_puncher(155);
 }
 
 void doublePunch(){
-  move_puncher(165);
+  move_puncher(160);
   angler.move_velocity(-170);
   intake.move_velocity(250);
-  move_puncher(165);
+  move_puncher(155);
   pros::delay(400);
-  move_puncher(165);
+  move_puncher(160);
   pros::delay(100);
-  move_puncher(165);
+  move_puncher(155);
 }
 
 void brakeMotors(){//brake the base motors
@@ -141,7 +141,7 @@ void arm_stack_task(void* param){
 }
 void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEELS
 
-  const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION;
+  const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.2;
   bool goalMet = false; bool oneTime = true;
   int targetVelocity = 0;
   double currentPosition = 0;
@@ -211,7 +211,7 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 }
 
 void move_align(float targetDistance, int velocity){
-   const double degreeGoal = (targetDistance/ENCODER_CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION;
+   const double degreeGoal = (targetDistance/ENCODER_CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.25;
    if (targetDistance < 0){
      velocity *= -1;
    }
