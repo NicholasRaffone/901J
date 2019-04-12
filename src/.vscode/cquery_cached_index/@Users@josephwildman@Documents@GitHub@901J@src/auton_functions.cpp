@@ -9,7 +9,7 @@ const double CIRCUMFERENCE = 2*M_PI*WHEEL_RADIUS;
 const double ENCODER_CIRCUMFERENCE = 2*M_PI*ENCODER_WHEEL_RADIUS;
 const float ENCODERTICKSPERREVOLUTION = 360.0;
 const int DEFAULTSLEWRATEINCREMENT = 20;
-const int ARMGEARRATIO = 7;
+const int ARMGEARRATIO = 5;
 
 void move_puncher(int target){
   puncher.tare_position();
