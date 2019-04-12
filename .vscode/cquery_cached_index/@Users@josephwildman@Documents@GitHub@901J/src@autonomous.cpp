@@ -131,7 +131,7 @@ void blueclose_nopark(){
   park_PID(24,150,2);
   pros::delay(100);
   turn_PID(90.0,65);
-
+  doublePunch();
 }
 
 void blueclose_park(){
