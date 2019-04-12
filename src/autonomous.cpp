@@ -41,7 +41,7 @@
  }
 
 void redclose_nopark(){
-  park_PID(30.0, 150, 2);
+  park_PID(30, 150, 2);
   pros::delay(1000);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
@@ -63,21 +63,21 @@ void redclose_nopark(){
 }
 
 void redclose_park(){
-  park_PID(30.0, 150, 2);
+  park_PID(35.0, 150, 2);
   pros::delay(1000);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
-  park_PID(-34, 150, 0);
+  park_PID(-37, 150, 0);
   park_PID(5, 80, 0);
-  turn_PID(-90, 65);
+  turn_PID(-90, 60);
   doublePunch();
   angler.move_velocity(100);
   turn_PID(-3,50);
-  park_PID(39, 150, 2);
+  park_PID(42, 150, 2);
   angler.move_velocity(0);
   pros::delay(1000);
   park_PID(-50,150,0);
-  turn_PID(90,65);
+  turn_PID(90,60);
   park_PID(20,150,0);
 }
 

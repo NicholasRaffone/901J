@@ -244,7 +244,7 @@ void turn_PID(float targetDegree, int maxVelocity){
   double error = 0;
   double previous_error = degreeGoal;
   double kP = 0.15;
-  double kI = 0.0002;
+  double kI = 0.0008;
   double kD = 0.00;
   double integral = 0;
   double derivative = 0;
