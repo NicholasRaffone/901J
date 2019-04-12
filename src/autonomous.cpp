@@ -1,3 +1,4 @@
+
 #include "main.h"
 #include "config.hpp"
 #include "config.hpp"
@@ -127,8 +128,9 @@ void redfar_park(){
 }
 
 void blueclose_nopark(){
-  std::string text("hello");
-  pros::Task armStacker(auton_task,&text);
+  park_PID(24,150,2);
+  pros::delay(100);
+  turn_PID(90.0,65);
 
 }
 

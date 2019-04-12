@@ -1,3 +1,4 @@
+
 #include "main.h"
 #include "config.hpp"
 #include "config.hpp"
@@ -82,7 +83,19 @@ void redclose_park(){
 
 void redfar_nopark(){
   park_PID(-35,150,0);
-  arm_PID(30,200);
+  arm_PID(45,200);
+  park_PID(10,150,0);
+  turn_PID(120,70);
+  park_PID(5,50,5);
+  park_PID(-15,150,0);
+  turn_PID(90,65);
+  park_PID(10,150,2);
+  pros::delay(500);
+  turn_PID(-45,65);
+  doublePunch();
+  /*
+  park_PID(-35,150,0);
+  arm_PID(45,200);
   turn_PID(-10,50);
   park_PID(33,150,5);
   turn_PID(120,80);
@@ -90,6 +103,7 @@ void redfar_nopark(){
   pros::delay(500);
   turn_PID(-45,65);
   doublePunch();
+  */
   /*setpuncher();
   park_PID(30.5, 150, 2);
   park_PID(-3, 50, 2);
@@ -105,26 +119,18 @@ void redfar_nopark(){
 }
 
 void redfar_park(){
-  park_PID(-35,150,0);
-  arm_PID(30,200);
-  turn_PID(-10,50);
-  park_PID(33,150,5);
-  turn_PID(120,80);
-  park_PID(31,150,2);
-  pros::delay(500);
-  turn_PID(-45,65);
+  park_PID(30.5, 150, 2);
+  park_PID(-3, 50, 2);
+  turn_PID(-85, 65);
+  pros::delay(1000);
   doublePunch();
-
-  turn_PID(45,65);
-  park_PID(-8,80,0);
-  turn_PID(-90,65);
-  park_PID(12,150,2);
 
 }
 
 void blueclose_nopark(){
-  std::string text("hello");
-  pros::Task armStacker(auton_task,&text);
+  park_PID(24,150,2);
+  pros::delay(100);
+  turn_PID(90.0,65);
 
 }
 

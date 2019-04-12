@@ -154,8 +154,8 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
   double derivative = 0;
 
   if (targetDistance < 0) {maxVelocity *= -1;}
-  right_chain.tare_position();
-  left_chain.tare_position();
+  right_wheel.tare_position();
+  left_wheel.tare_position();
 
   if(multiTask == 1){//setting multitask
     intake.move_velocity(-200); //intake out
@@ -172,7 +172,7 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 
 
 
-    currentPosition = (right_chain.get_position() + left_chain.get_position())/2.0;
+    currentPosition = (right_wheel.get_position() + left_wheel.get_position())/2.0;
     error = degreeGoal - currentPosition;
 
     if (std::abs(error) < 600){
@@ -211,7 +211,8 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 }
 
 void move_align(float targetDistance, int velocity){
-   const double degreeGoal = (targetDistance/ENCODER_CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.25;
+   const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.25;
+   left_wheel.tare_position();
    if (targetDistance < 0){
      velocity *= -1;
    }
@@ -220,7 +221,7 @@ void move_align(float targetDistance, int velocity){
    right_wheel.move_velocity(velocity);
    right_chain.move_velocity(velocity);
 
-  while (std::abs(mainEncoder.get_value()) < degreeGoal) {
+  while (std::abs(left_wheel.get_position()) < degreeGoal) {
     pros::delay(5);
   }
 }
@@ -252,11 +253,7 @@ void turn_PID(float targetDegree, int maxVelocity){
     if (std::abs(error) < 1000){
       integral += error;
     }
-    printf("gyro avg %f\r\n",currentPosition);
-    currentPosition = gyro.get_value();
-    printf("gyro 1 %f\r\n",currentPosition);
-    currentPosition = gyro2.get_value();
-    printf("gyro 2 %f\r\n",currentPosition);
+
     derivative = error - previous_error;
     previous_error = error;
 
