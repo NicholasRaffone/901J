@@ -159,7 +159,7 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.4;
+  double kP = 0.35;
   double kI = 0.0003;
   double kD = 0.000;
   double motorkP = 0.0;

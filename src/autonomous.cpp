@@ -48,8 +48,6 @@ void redclose_nopark(){
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
   park_PID(8, 150, 0);
-
-
   turn_PID(-88, 75);
   intake.move_velocity(-150);
   pros::delay(250);
@@ -66,7 +64,7 @@ void redclose_nopark(){
   pros::delay(300);
   park_PID(38,200,1);
   pros::delay(100);
-  turn_PID(-59,90);
+  turn_PID(-59,60);
   shootSensor();
   park_PID(30,200,0);
 }
@@ -137,7 +135,31 @@ void redfar_park(){
 }
 
 void blueclose_nopark(){
+  park_PID(33, 200, 2);
+  pros::delay(150);
+  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  intake.move_velocity(0);
+  park_PID(-53.0, 160, 0);
+  park_PID(8, 150, 0);
+  turn_PID(88, 75);
+  intake.move_velocity(-150);
+  pros::delay(250);
+  angler.move_velocity(0);
+  intake.move_velocity(0);
+  doublePunch();
+  turn_PID(1.5,40);
+  park_PID(45, 200, 2);
+  angler.move_velocity(0);
+  park_PID(-30,150,2);
+  pros::delay(100);
+  turn_PID(-90,70);
+  park_PID(-7.5,120,2);
+  pros::delay(300);
+  park_PID(38,200,1);
+  pros::delay(100);
+  turn_PID(59,60);
   shootSensor();
+  park_PID(30,200,0);
 }
 
 void blueclose_park(){
