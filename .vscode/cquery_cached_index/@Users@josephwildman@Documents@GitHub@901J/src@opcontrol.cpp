@@ -141,9 +141,7 @@ turn_PID(90.0,70);
        arm.move_velocity(0);
      }
 
-     if (armLimitSwitch.get_value() == 1){ //resets encoder
-       arm.tare_position();
-     }
+
 
      /**if(master.get_digital(pros::E_CONTROLLER_DIGITAL_L1) == 1){
        shootpuncher();

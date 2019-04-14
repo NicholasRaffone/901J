@@ -198,7 +198,7 @@ void initialize() {/*Create a three buttons, color, side, display auton */
  * the VEX Competition Switch, following either autonomous or opcontrol. When
  * the robot is enabled, this task will exit.
  */
-void disabled() {}
+void disabled() {  ballSensor.calibrate();}
 
 /**
  * Runs after initialize(), and before autonomous when connected to the Field

@@ -8,7 +8,7 @@ const double WHEEL_RADIUS = 2.0;
 const double CIRCUMFERENCE = 2*M_PI*WHEEL_RADIUS;
 const double ENCODER_CIRCUMFERENCE = 2*M_PI*ENCODER_WHEEL_RADIUS;
 const float ENCODERTICKSPERREVOLUTION = 360.0;
-const int DEFAULTSLEWRATEINCREMENT = 20;
+const int DEFAULTSLEWRATEINCREMENT = 15;
 const int ARMGEARRATIO = 5;
 
 void move_puncher(int target){
@@ -38,10 +38,8 @@ void doublePunch(){
   angler.move_velocity(-170);
   intake.move_velocity(250);
   move_puncher(155);
-  pros::delay(400);
-  move_puncher(160);
   pros::delay(100);
-  move_puncher(155);
+  shootSensor();
 }
 
 void brakeMotors(){//brake the base motors
@@ -85,6 +83,7 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   const double degreeGoal = (targetDistance/ENCODER_CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION;
   bool goalMet = false;
   int targetVelocity = 0;
+  double why = 2;
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
@@ -94,7 +93,7 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
   double integral = 0;
   double derivative = 0;
 
-  if (targetDistance < 0) {maxVelocity *= -1;}
+  if (targetDistance < 0) {maxVelocity *= -1; why*=-1;}
   mainEncoder.reset();
 
   if(multiTask == 1){//setting multitask
@@ -124,10 +123,15 @@ void move_PID(float targetDistance, int maxVelocity, int multiTask){
       targetVelocity = maxVelocity;
     }
 
-    slewRateControl(&left_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&left_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+    /*left_wheel.move_velocity(targetVelocity);
+    right_wheel.move_velocity(targetVelocity);
+    right_chain.move_velocity(targetVelocity);
+    left_chain.move_velocity(targetVelocity);
+    */
+    slewRateControl(&left_wheel, targetVelocity+why, DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&left_chain, targetVelocity+why, DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
 
     if (std::abs(error) < 10){
       goalMet = true;
@@ -151,12 +155,14 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
   const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.2;
   bool goalMet = false; bool oneTime = true;
   int targetVelocity = 0;
+  double motorError = 0;
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.42;
-  double kI = 0.0004;
-  double kD = 0.001;
+  double kP = 0.4;
+  double kI = 0.0003;
+  double kD = 0.000;
+  double motorkP = 0.0;
   double integral = 0;
   double derivative = 0;
 
@@ -178,9 +184,10 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 
 
 
-
+    motorError = right_wheel.get_position() - left_wheel.get_position();
     currentPosition = (right_wheel.get_position() + left_wheel.get_position())/2.0;
     error = degreeGoal - currentPosition;
+
 
     if (std::abs(error) < 600){
       integral += error;
@@ -191,14 +198,14 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 
     targetVelocity = kP*error + kI*integral + kD*derivative;
 
-    if (targetVelocity > maxVelocity){
+    if (std::abs(targetVelocity) > std::abs(maxVelocity)){
       targetVelocity = maxVelocity;
     }
 
-    slewRateControl(&left_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&left_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT);
-    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&left_wheel, targetVelocity+(motorError*motorkP), DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&left_chain, targetVelocity+(motorError*motorkP), DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
+    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
 
     if (std::abs(error) < 10){
       goalMet = true;
@@ -213,7 +220,12 @@ void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEE
 
     pros::delay(10);
   }
-
+  if(multiTask == 1 || multiTask == 2){//setting multitask
+    intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+    intake.move_velocity(0); //intake out
+  } else if (multiTask == 3 || multiTask == 4){
+    angler.move_velocity(0);
+  }
   brakeMotors();
 }
 
@@ -243,8 +255,8 @@ void turn_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.15;
-  double kI = 0.0008;
+  double kP = 0.18;
+  double kI = 0.0003;
   double kD = 0.00;
   double integral = 0;
   double derivative = 0;
@@ -280,7 +292,7 @@ void turn_PID(float targetDegree, int maxVelocity){
     slewRateControl(&right_wheel, rightTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&right_chain, rightTarget, DEFAULTSLEWRATEINCREMENT);
 
-    if (std::abs(error) < 6){
+    if (std::abs(error) < 10){
       goalMet = true;
     }
 
@@ -306,9 +318,7 @@ void arm_PID(float targetDegree, int maxVelocity){
   double derivative = 0;
 
   if (targetDegree < 0) {maxVelocity *= -1;}
-  if (armLimitSwitch.get_value() == 1){
-    limitStart = true;
-  }
+
   arm.tare_position();
 
 
@@ -332,9 +342,6 @@ void arm_PID(float targetDegree, int maxVelocity){
     slewRateControl(&arm, targetVelocity, DEFAULTSLEWRATEINCREMENT);
 
     if (std::abs(error) < 1){
-      goalMet = true;
-    } else if (armLimitSwitch.get_value() == 1 && !limitStart){ //resets encoder
-      arm.tare_position();
       goalMet = true;
     }
 
@@ -400,4 +407,20 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
     pros::delay(10);
   }
   brakeMotors();
+}
+
+void shootSensor(){
+
+  int minValue = 100;
+  int maxValue = 1000;
+  int threshold = (minValue + maxValue) / 2;
+  int iterate = 0;
+  intake.move_velocity(200);
+  while (ballSensor.get_value() > threshold && iterate < 100){
+    //printf("%d\r\n",ballSensor.get_value());
+    pros::delay(10);
+    iterate++;
+  }
+  shootpuncher();
+  intake.move_velocity(0);
 }

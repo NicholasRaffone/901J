@@ -12,9 +12,9 @@ extern const char GYRO2_PORT; //D
 extern const char ENCODER_TOP_PORT; //A
 extern const char ENCODER_BOT_PORT; //B
 extern const int ARM_MOTOR_PORT;
-extern const char LIMIT_SWITCH_PORT;
 extern const char ULTRASONIC_OUTPUT;
 extern const char ULTRASONIC_INPUT;
+extern const char LINESENSOR_INPUT;
 
 extern pros::Motor left_wheel;
 extern pros::Motor right_wheel;
@@ -28,8 +28,8 @@ extern pros::Motor angler;
 extern pros::ADIGyro gyro;
 extern pros::ADIGyro gyro2;
 extern pros::ADIEncoder mainEncoder;
-extern pros::ADIDigitalIn armLimitSwitch;
 extern pros::ADIUltrasonic ultrasonic;
+extern pros::ADILineSensor ballSensor;
 
 extern bool blueSide; //false = red, true = blue
 extern bool farSide; //false = close, true = far

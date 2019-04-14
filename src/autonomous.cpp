@@ -22,7 +22,7 @@
  void auton_task(void* param){
    setpuncher();
    shootpuncher();
-   pros::delay(100);
+   pros::delay(140);
    park_PID(35.0, 100, 2);
 
   /* setpuncher();
@@ -41,25 +41,34 @@
  }
 
 void redclose_nopark(){
-  park_PID(30, 150, 2);
-  pros::delay(1000);
+
+  park_PID(33, 200, 2);
+  pros::delay(150);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
-  park_PID(-34, 150, 0);
-  park_PID(5, 80, 0);
-  turn_PID(-90, 65);
-  doublePunch();
-  angler.move_velocity(100);
-  turn_PID(-3,50);
-  park_PID(39, 150, 2);
+  park_PID(-53.0, 160, 0);
+  park_PID(8, 150, 0);
+
+
+  turn_PID(-88, 75);
+  intake.move_velocity(-150);
+  pros::delay(250);
   angler.move_velocity(0);
-  pros::delay(1000);
-  park_PID(-25,150,0);
-  turn_PID(90,65);
-  park_PID(20,100,1);
-  turn_PID(-45,60);
+  intake.move_velocity(0);
   doublePunch();
-  park_PID(15,150,0);
+  turn_PID(-1.5,40);
+  park_PID(45, 200, 2);
+  angler.move_velocity(0);
+  park_PID(-30,150,2);
+  pros::delay(100);
+  turn_PID(90,70);
+  park_PID(-7.5,120,2);
+  pros::delay(300);
+  park_PID(38,200,1);
+  pros::delay(100);
+  turn_PID(-59,90);
+  shootSensor();
+  park_PID(30,200,0);
 }
 
 void redclose_park(){
@@ -68,7 +77,7 @@ void redclose_park(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-37, 150, 0);
-  park_PID(5, 80, 0);
+  park_PID(4, 50, 0);
   turn_PID(-90, 60);
   doublePunch();
   angler.move_velocity(100);
@@ -128,10 +137,7 @@ void redfar_park(){
 }
 
 void blueclose_nopark(){
-  park_PID(24,150,2);
-  pros::delay(100);
-  turn_PID(90.0,65);
-  doublePunch();
+  shootSensor();
 }
 
 void blueclose_park(){
