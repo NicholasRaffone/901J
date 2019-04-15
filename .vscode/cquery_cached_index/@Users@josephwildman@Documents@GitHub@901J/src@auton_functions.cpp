@@ -11,6 +11,10 @@ const float ENCODERTICKSPERREVOLUTION = 360.0;
 const int DEFAULTSLEWRATEINCREMENT = 15;
 const int ARMGEARRATIO = 5;
 
+void arm_stack_task(void* param){
+  arm_PID(120,200);
+}
+
 void move_puncher(int target){
   puncher.tare_position();
   bool override = false;
@@ -78,78 +82,7 @@ void slewRateControl(pros::Motor *motor, int targetVelocity, int increment){
   motor->move_velocity(currentVelocity);
 }
 
-void move_PID(float targetDistance, int maxVelocity, int multiTask){
 
-  const double degreeGoal = (targetDistance/ENCODER_CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION;
-  bool goalMet = false;
-  int targetVelocity = 0;
-  double why = 2;
-  double currentPosition = 0;
-  double error = 0;
-  double previous_error = degreeGoal;
-  double kP = 0.40;
-  double kI = 0.0005;
-  double kD = 0.01;
-  double integral = 0;
-  double derivative = 0;
-
-  if (targetDistance < 0) {maxVelocity *= -1; why*=-1;}
-  mainEncoder.reset();
-
-  if(multiTask == 1){//setting multitask
-    intake.move_velocity(-200); //intake out
-  } else if (multiTask == 2){
-    intake.move_velocity(200); //intake in
-  } else if (multiTask == 3){
-    angler.move_velocity(-200);
-  } else if (multiTask == 4){
-    angler.move_velocity(200);
-  }
-
-  while(!goalMet){
-    currentPosition = mainEncoder.get_value();
-    error = degreeGoal - currentPosition;
-
-    if (std::abs(error) < 500){
-      integral += error;
-    }
-
-    derivative = error - previous_error;
-    previous_error = error;
-
-    targetVelocity = kP*error + kI*integral + kD*derivative;
-
-    if (targetVelocity > maxVelocity){
-      targetVelocity = maxVelocity;
-    }
-
-    /*left_wheel.move_velocity(targetVelocity);
-    right_wheel.move_velocity(targetVelocity);
-    right_chain.move_velocity(targetVelocity);
-    left_chain.move_velocity(targetVelocity);
-    */
-    slewRateControl(&left_wheel, targetVelocity+why, DEFAULTSLEWRATEINCREMENT/2);
-    slewRateControl(&left_chain, targetVelocity+why, DEFAULTSLEWRATEINCREMENT/2);
-    slewRateControl(&right_wheel, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
-    slewRateControl(&right_chain, targetVelocity, DEFAULTSLEWRATEINCREMENT/2);
-
-    if (std::abs(error) < 10){
-      goalMet = true;
-    }
-    pros::delay(10);
-  }
-
-    if(multiTask == 1 || multiTask == 2){//setting multitask
-      intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-      intake.move_velocity(0); //intake out
-    } else if (multiTask == 3 || multiTask == 4){
-      angler.move_velocity(0);
-    }
-  brakeMotors();
-}
-void arm_stack_task(void* param){
-  arm_PID(90,200);
-}
 void park_PID(float targetDistance, int maxVelocity, int multiTask){ //BACK WHEELS
 
   const double degreeGoal = (targetDistance/CIRCUMFERENCE)*ENCODERTICKSPERREVOLUTION/1.2;
@@ -255,8 +188,8 @@ void turn_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.18;
-  double kI = 0.0003;
+  double kP = 0.19;
+  double kI = 0.0004;
   double kD = 0.00;
   double integral = 0;
   double derivative = 0;
@@ -300,7 +233,57 @@ void turn_PID(float targetDegree, int maxVelocity){
   }
   brakeMotors();
 }
+void arc_turn_PID(float targetDegree, int maxVelocity){
 
+  const double degreeGoal = targetDegree*10;
+  bool goalMet = false;
+  int targetVelocity = 0;
+  int leftTarget = 0;
+  double currentPosition = 0;
+  double error = 0;
+  double previous_error = degreeGoal;
+  double kP = 0.18;
+  double kI = 0.0003;
+  double kD = 0.00;
+  double integral = 0;
+  double derivative = 0;
+  if(targetDegree<0){maxVelocity *= -1;}
+  gyro.reset();
+  gyro2.reset();
+
+
+  while(!goalMet){
+    currentPosition = (gyro.get_value()+gyro2.get_value())/2;
+    error = degreeGoal - currentPosition;
+    printf("%f\r\n",currentPosition);
+    if (std::abs(error) < 1000){
+      integral += error;
+    }
+
+    derivative = error - previous_error;
+    previous_error = error;
+
+    targetVelocity = kP*error + kI*integral + kD*derivative;
+
+    if (std::abs(targetVelocity) > std::abs(maxVelocity)){
+      targetVelocity = maxVelocity;
+    }
+
+
+      leftTarget = targetVelocity;
+
+    slewRateControl(&left_wheel, leftTarget, DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&left_chain, leftTarget, DEFAULTSLEWRATEINCREMENT);
+
+
+    if (std::abs(error) < 10){
+      goalMet = true;
+    }
+
+    pros::delay(10);
+  }
+  brakeMotors();
+}
 void arm_PID(float targetDegree, int maxVelocity){
   arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
