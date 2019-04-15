@@ -239,6 +239,7 @@ void arc_turn_PID(float targetDegree, int maxVelocity){
   bool goalMet = false;
   int targetVelocity = 0;
   int leftTarget = 0;
+  int rightTarget = 0;
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
@@ -271,10 +272,14 @@ void arc_turn_PID(float targetDegree, int maxVelocity){
 
 
       leftTarget = targetVelocity;
-
+      rightTarget = -1*targetVelocity;
+    if (targetVelocity > 0){
     slewRateControl(&left_wheel, leftTarget, DEFAULTSLEWRATEINCREMENT);
     slewRateControl(&left_chain, leftTarget, DEFAULTSLEWRATEINCREMENT);
-
+  } else if (targetVelocity <= 0){
+    slewRateControl(&right_wheel,rightTarget,DEFAULTSLEWRATEINCREMENT);
+    slewRateControl(&right_chain,rightTarget,DEFAULTSLEWRATEINCREMENT);
+  }
 
     if (std::abs(error) < 10){
       goalMet = true;
@@ -284,6 +289,7 @@ void arc_turn_PID(float targetDegree, int maxVelocity){
   }
   brakeMotors();
 }
+
 void arm_PID(float targetDegree, int maxVelocity){
   arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
 
@@ -400,7 +406,7 @@ void shootSensor(){
   int iterate = 0;
   intake.move_velocity(200);
   while (ballSensor.get_value() > threshold && iterate < 100){
-    //printf("%d\r\n",ballSensor.get_value());
+    printf("%d\r\n",ballSensor.get_value());
     pros::delay(10);
     iterate++;
   }

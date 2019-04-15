@@ -50,7 +50,7 @@
  }
 
 void redclose_nopark(){
-  park_PID(34, 180, 2);
+  park_PID(34.5, 180, 2);
   pros::delay(200);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
@@ -59,18 +59,19 @@ void redclose_nopark(){
   turn_PID(-88, 75);
   std::string text("doublepunch");
   pros::Task punchMove(close_double_task,&text);
+  pros::delay(250);
   turn_PID(-1.5,40);
   park_PID(45, 200, 2);
   park_PID(-30,150,2);
   pros::delay(100);
   turn_PID(90,60);
-  park_PID(-5,120,2);
+  park_PID(-5,160,0);
   pros::delay(100);
-  park_PID(39,120,1);
+  park_PID(33,100,1);
   pros::delay(100);
-  turn_PID(-55,60);
+  turn_PID(-45,60);
   shootpuncher();
-  park_PID(30,200,0);
+  park_PID(34,200,0);
   /*park_PID(34, 180, 2);
   pros::delay(150);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
@@ -158,8 +159,20 @@ void redfar_nopark(){
   unBrakeMotors();*/
 }
 
+void arm_stack_task2(void* param){
+  arm_PID(135,200);
+  pros::delay(300);
+  arm_PID(-10,200);
+
+}
 void redfar_park(){
-  park_PID(-35,150,0);
+  park_PID(-45,150,0);
+  arm_PID(45,200);
+  arc_turn_PID(-120,100);
+  std::string text3("test");
+  pros::Task armStacking(arm_stack_task2,&text3);
+  
+  /*park_PID(-35,150,0);
   arm_PID(45,200);
   park_PID(7,150,0);
   turn_PID(120,70);
@@ -171,7 +184,7 @@ void redfar_park(){
   turn_PID(-45,65);
   doublePunch();
   turn_PID(-45,65);
-  park_PID(12,150,2);
+  park_PID(12,150,2);*/
 }
 
 void blueclose_nopark(){
@@ -240,23 +253,8 @@ void bluefar_nopark(){
 }
 
 void bluefar_park(){
-  setpuncher();
-  park_PID(30.5, 150, 2);
-  park_PID(-3, 50, 2);
-  pros::delay(500);
-  intakeball();
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-  intake.move_velocity(0);
-  turn_PID(85, 65);
-  pros::delay(5000);
-  doublePunch();
-  turn_PID(-85, 65);
-  park_PID(-5,65,0);
-  turn_PID(90,65);
-  park_PID(10,200,1);
-  brakeMotors();
-  pros::delay(500);
-  unBrakeMotors();
+
+  shootSensor();
 }
 
 void autonomous(){
