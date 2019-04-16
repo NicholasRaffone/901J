@@ -48,7 +48,7 @@ void puncher_task(void* param){
       setpuncher();
 
     }else if((master.get_digital(pros::E_CONTROLLER_DIGITAL_RIGHT) != 0) || master.get_digital(pros::E_CONTROLLER_DIGITAL_Y)){
-      puncher.move_velocity(200);
+      shootSensor();
       }else {
       puncher.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
       puncher.move_velocity(0);
@@ -77,22 +77,7 @@ void puncher_task(void* param){
 }
 
 
-void arm_task(void* param){
-  while(true){
-  if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
-    slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
-  } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
-    slewRateControl(&arm,-200,DEFAULTSLEWRATEINCREMENT);
-  }else if (master.get_digital(pros::E_CONTROLLER_DIGITAL_Y) != 0){
-    arm_PID(190,200);
-    pros::delay(300);
-    arm_PID(-5,200);
-  }else {
-    arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
-    arm.move_velocity(0);
-  }}
 
-}
 
 void opcontrol() {
 const int MAXSPEED = 200;
@@ -100,8 +85,7 @@ const int TURNAMT = 150;
 uint32_t encoder_value = 0;
 std::string text("puncher");
 pros::Task punchTask(puncher_task,&text);
-std::string text2("arm");
-pros::Task armTask(arm_task,&text2);
+
 /*
 move_PID(50.0,180.0,0);
 turn_PID(180.0,100);
@@ -162,7 +146,15 @@ turn_PID(90.0,70);
        setpuncher();
        pros::delay(1000);
      }**/
-
+     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
+       slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
+     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
+       slewRateControl(&arm,-200,DEFAULTSLEWRATEINCREMENT);
+     }
+     else {
+       arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
+       arm.move_velocity(0);
+     }
 
 
      if(master.get_digital(pros::E_CONTROLLER_DIGITAL_X) != 0){

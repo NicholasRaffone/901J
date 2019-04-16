@@ -400,15 +400,15 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
 
 void shootSensor(){
 
-  int minValue = 100;
-  int maxValue = 1000;
+  int minValue = 900;
+  int maxValue = 2000;
   int threshold = (minValue + maxValue) / 2;
   int iterate = 0;
   intake.move_velocity(200);
   while (ballSensor.get_value() > threshold && iterate < 100){
     printf("%d\r\n",ballSensor.get_value());
     pros::delay(10);
-    iterate++;
+    iterate--;
   }
   shootpuncher();
   intake.move_velocity(0);

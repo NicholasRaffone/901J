@@ -55,12 +55,12 @@ void redclose_nopark(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
-  park_PID(8, 150, 0);
+  park_PID(8.5, 150, 0);
   turn_PID(-88, 75);
   std::string text("doublepunch");
   pros::Task punchMove(close_double_task,&text);
-  pros::delay(250);
-  turn_PID(-1.5,40);
+  pros::delay(500);
+  turn_PID(-1.5,20);
   park_PID(45, 200, 2);
   park_PID(-30,150,2);
   pros::delay(100);
@@ -171,7 +171,7 @@ void redfar_park(){
   arc_turn_PID(-120,100);
   std::string text3("test");
   pros::Task armStacking(arm_stack_task2,&text3);
-  
+
   /*park_PID(-35,150,0);
   arm_PID(45,200);
   park_PID(7,150,0);
@@ -255,6 +255,7 @@ void bluefar_nopark(){
 void bluefar_park(){
 
   shootSensor();
+  pros::delay(10000);
 }
 
 void autonomous(){
