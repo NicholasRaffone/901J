@@ -100,7 +100,7 @@ void redclose_nopark(){
 }
 
 void redclose_park(){
-  park_PID(34, 200, 2);
+  park_PID(34.5, 200, 2);
   pros::delay(150);
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
@@ -122,16 +122,21 @@ void redclose_park(){
 }
 
 void redfar_nopark(){
-  park_PID(-45,150,0);
-  arm_PID(45,200);
-  park_PID(7,150,0);
-  turn_PID(-120,70);
-  park_PID(12,50,5);
-  park_PID(-18,150,0);
-  turn_PID(-90,65);
-  park_PID(12,150,2);
+  park_PID(-51,180,0);
+  arm_PID(90,200);
+  park_PID(22.5,150,0);
+  pros::delay(100);
+  turn_PID(-117,65);
+  pros::delay(200);
+  park_PID(11.5,60,5);
+  park_PID(-26,150,0);
+  pros::delay(100);
+  turn_PID(-87,65);
+  pros::delay(100);
+  park_PID(24,150,2);
   pros::delay(500);
   turn_PID(-45,65);
+  pros::delay(200);
   doublePunch();
 
   /*

@@ -11,9 +11,9 @@ const char GYRO_PORT = 'C';
 const char GYRO2_PORT = 'D';
 const char ENCODER_TOP_PORT = 'A';
 const char ENCODER_BOT_PORT = 'B';
-const char LIMIT_SWITCH_PORT = 'F';
 const char ULTRASONIC_OUTPUT = 'G';
 const char ULTRASONIC_INPUT = 'H';
+const char LINESENSOR_INPUT = 'F';
 
 pros::Motor left_wheel (LEFT_WHEEL_PORT,pros::E_MOTOR_GEARSET_18, false,pros::E_MOTOR_ENCODER_DEGREES);
 pros::Motor right_wheel (RIGHT_WHEEL_PORT, pros::E_MOTOR_GEARSET_18, true,pros::E_MOTOR_ENCODER_DEGREES);
@@ -27,8 +27,9 @@ pros::Motor angler(ANGLER_MOTOR_PORT, pros::E_MOTOR_GEARSET_18, false,pros::E_MO
 pros::ADIGyro gyro(GYRO_PORT);
 pros::ADIGyro gyro2(GYRO2_PORT);
 pros::ADIEncoder mainEncoder(ENCODER_TOP_PORT,ENCODER_BOT_PORT,true);
-pros::ADIDigitalIn armLimitSwitch(LIMIT_SWITCH_PORT);
 pros::ADIUltrasonic ultrasonic(ULTRASONIC_OUTPUT,ULTRASONIC_INPUT);
+pros::ADILineSensor ballSensor(LINESENSOR_INPUT);
+
 
 bool blueSide = false; // 1
 bool farSide = false; // 2

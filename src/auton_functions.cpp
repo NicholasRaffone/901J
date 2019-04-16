@@ -12,7 +12,11 @@ const int DEFAULTSLEWRATEINCREMENT = 15;
 const int ARMGEARRATIO = 5;
 
 void arm_stack_task(void* param){
-  arm_PID(120,200);
+  arm_PID(90,150);
+  pros::delay(1000);
+  arm.tare_position();
+  arm_PID(-160,150);
+
 }
 
 void move_puncher(int target){
@@ -188,7 +192,7 @@ void turn_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.19;
+  double kP = 0.18;
   double kI = 0.0004;
   double kD = 0.00;
   double integral = 0;
@@ -291,7 +295,7 @@ void arc_turn_PID(float targetDegree, int maxVelocity){
 }
 
 void arm_PID(float targetDegree, int maxVelocity){
-  arm.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 
   const double degreeGoal = (targetDegree*ARMGEARRATIO);
   bool goalMet = false;
@@ -336,7 +340,7 @@ void arm_PID(float targetDegree, int maxVelocity){
 
     pros::delay(10);
   }
-  arm.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
+  arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
   arm.move_velocity(0);
 }
 
@@ -408,7 +412,7 @@ void shootSensor(){
   while (ballSensor.get_value() > threshold && iterate < 100){
     printf("%d\r\n",ballSensor.get_value());
     pros::delay(10);
-    iterate--;
+    iterate++;
   }
   shootpuncher();
   intake.move_velocity(0);
