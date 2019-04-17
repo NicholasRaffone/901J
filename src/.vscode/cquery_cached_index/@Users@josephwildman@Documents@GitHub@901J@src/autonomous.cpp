@@ -55,11 +55,11 @@ void redclose_nopark(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
-  park_PID(8, 150, 0);
-  turn_PID(-90, 65);
+  park_PID(7, 150, 0);
+  turn_PID(-89, 65);
   std::string text("doublepunch");
   pros::Task punchMove(close_double_task,&text);
-  pros::delay(1000);
+  pros::delay(1400);
   park_PID(48, 150, 2);
   park_PID(-30,150,2);
   pros::delay(100);
@@ -104,8 +104,8 @@ void redclose_park(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
-  park_PID(9, 150, 0);
-  turn_PID(-91, 70);
+  park_PID(7, 150, 0);
+  turn_PID(-88, 70);
   intake.move_velocity(-150);
   pros::delay(250);
   angler.move_velocity(0);
@@ -130,12 +130,14 @@ void redfar_nopark(){
   pros::delay(100);
   turn_PID(-86,60);
   pros::delay(100);
-  park_PID(24,100,2);
+  park_PID(23,100,2);
   pros::delay(500);
   park_PID(-5,60,0);
   pros::delay(100);
   turn_PID(-41,65);
+  intake.move_velocity(-150);
   pros::delay(200);
+  intake.move_velocity(0);
   doublePunch();
 
   /*
@@ -257,24 +259,47 @@ void blueclose_park(){
 }
 
 void bluefar_nopark(){
-  setpuncher();
-  park_PID(30.5, 150, 2);
-  park_PID(-3, 50, 2);
-  pros::delay(500);
-  intakeball();
-  intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
+  park_PID(-52,190,0);
+  arm_PID(90,200);
+  park_PID(22.5,150,0);
+  pros::delay(100);
+  turn_PID(108,70);
+  pros::delay(200);
+  park_PID(11.8,90,5);
+  park_PID(-26,150,0);
+  pros::delay(100);
+  turn_PID(86,60);
+  pros::delay(100);
+  park_PID(23,100,2);
+  park_PID(-5,60,2);
+  pros::delay(100);
+  turn_PID(41,65);
+  intake.move_velocity(-150);
+  pros::delay(200);
   intake.move_velocity(0);
-  turn_PID(85, 65);
-  pros::delay(5000);
   doublePunch();
-  brakeMotors();
-  unBrakeMotors();
 }
 
 void bluefar_park(){
 
-  shootSensor();
-  pros::delay(10000);
+  park_PID(-52,200,0);
+  arm_PID(90,200);
+  park_PID(22,170,0);
+  pros::delay(50);
+  turn_PID(108,75);
+  pros::delay(100);
+  park_PID(11.6,95,5);
+  park_PID(-26,180,0);
+  pros::delay(50);
+  turn_PID(84,65);
+  pros::delay(100);
+  park_PID(22.2,180,2);
+  park_PID(-10,180,2);
+  pros::delay(50);
+  turn_PID(80,60);
+  pros::delay(50);
+  park_PID(36,190,0);
+  pros::delay(200);
 }
 
 void autonomous(){

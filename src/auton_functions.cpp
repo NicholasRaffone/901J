@@ -405,14 +405,50 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
   brakeMotors();
 }
 
+void calibrate(){
+  printf("min value, place ball \r\n");
+  long long int values = 0;
+  while (master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == 0){
+    pros::delay(10);
+  }
+  printf("%d\r\n",ballSensor.get_value());
+  printf("CALIBRATING \r\n");
+  for(int i = 0; i < 100; i++){
+    values += ballSensor.get_value();
+    pros::delay(10);
+  }
+  calibrate_min = values / 100;
+  printf("MIN: %d\r\n",calibrate_min);
+  printf("max value, remove ball \r\n");
+  while (master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == 0){
+    pros::delay(10);
+  }
+  values = 0;
+  printf("%d\r\n",ballSensor.get_value());
+  printf("CALIBRATING \r\n");
+  for(int i = 0; i < 100; i++){
+    values += ballSensor.get_value();
+    pros::delay(10);
+  }
+  calibrate_max = values / 100;
+  printf("MAX: %d\r\n",calibrate_min);
+  printf("DONE \r\n");
+  pros::delay(1000);
+}
 void shootSensor(){
-
-  int minValue = 900;
-  int maxValue = 2000;
-  int threshold = (minValue + maxValue) / 2;
+  int minValue;
+  int maxValue;
+  if (calibrate_min != 0){
+    minValue = calibrate_min;
+    maxValue = calibrate_max;
+  } else {
+    minValue = 1000;
+    maxValue = 2000;
+  }
+  int threshold = (minValue + maxValue) / 2.5;
   int iterate = 0;
   intake.move_velocity(200);
-  while (ballSensor.get_value() > threshold && iterate < 60){
+  while (ballSensor.get_value() > threshold && iterate < 50){
     printf("%d\r\n",ballSensor.get_value());
     pros::delay(10);
     iterate++;

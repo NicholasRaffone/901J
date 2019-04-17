@@ -31,6 +31,8 @@ extern pros::ADIEncoder mainEncoder;
 extern pros::ADIUltrasonic ultrasonic;
 extern pros::ADILineSensor ballSensor;
 
+extern int calibrate_min;
+extern int calibrate_max;
 extern bool blueSide; //false = red, true = blue
 extern bool farSide; //false = close, true = far
 extern bool park;
