@@ -12,8 +12,11 @@ const int DEFAULTSLEWRATEINCREMENT = 15;
 const int ARMGEARRATIO = 5;
 
 void arm_stack_task(void* param){
-  arm_PID(90,150);
-  pros::delay(1000);
+  arm_PID(90,100);
+  while(left_wheel.get_target_velocity() >= 0){
+  pros::delay(10);
+}
+pros::delay(200);
   arm.tare_position();
   arm_PID(-160,150);
 
@@ -409,7 +412,7 @@ void shootSensor(){
   int threshold = (minValue + maxValue) / 2;
   int iterate = 0;
   intake.move_velocity(200);
-  while (ballSensor.get_value() > threshold && iterate < 100){
+  while (ballSensor.get_value() > threshold && iterate < 60){
     printf("%d\r\n",ballSensor.get_value());
     pros::delay(10);
     iterate++;

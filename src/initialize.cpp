@@ -75,7 +75,7 @@
          farSide = true;
          lv_label_set_text(label1, "Far");
        }
-       if(blueSide){
+       if(blueSide == true){
          lv_obj_set_style(btn, &bluestyle);
        }else{
          lv_obj_set_style(btn, &redstyle);
@@ -106,7 +106,7 @@
    side = "Close";
   }
 
-  if(park){
+  if(park == true){
     parkk = " WITH Park ";
   }else{
     parkk = " WITHOUT Park ";
@@ -130,7 +130,7 @@
    parkstyle.body.border.width = 2;
    parkstyle.text.color = LV_COLOR_BLACK;
    lv_obj_t * label1 = lv_obj_get_child(btn, NULL); /*The label is the only child*/
-   if(park){
+   if(park == true){
      park = false;
      lv_label_set_text(label1, "No Park");
    }else{
@@ -186,11 +186,11 @@ void initialize() {/*Create a three buttons, color, side, display auton */
     lv_label_set_text(label, "Display \nAuton");
 
     lv_obj_t * btn4 = lv_btn_create(lv_scr_act(), NULL);
+    label = lv_label_create(btn4, NULL);
+    lv_label_set_text(label, "Park");
     lv_obj_set_style(btn4, &parkstyle);
     lv_btn_set_action(btn4, LV_BTN_ACTION_CLICK, parkyes);
     lv_obj_align(btn4, btn2, LV_ALIGN_OUT_RIGHT_TOP, 35,60);
-    label = lv_label_create(btn4, NULL);
-    lv_label_set_text(label, "Park");
 }
 
 /**

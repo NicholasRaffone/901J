@@ -55,13 +55,12 @@ void redclose_nopark(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
-  park_PID(8.5, 150, 0);
-  turn_PID(-88, 75);
+  park_PID(8, 150, 0);
+  turn_PID(-90, 65);
   std::string text("doublepunch");
   pros::Task punchMove(close_double_task,&text);
-  pros::delay(600);
-  turn_PID(-1.5,20);
-  park_PID(45, 200, 2);
+  pros::delay(1000);
+  park_PID(48, 150, 2);
   park_PID(-30,150,2);
   pros::delay(100);
   turn_PID(90,60);
@@ -105,37 +104,37 @@ void redclose_park(){
   intake.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
   intake.move_velocity(0);
   park_PID(-53.0, 160, 0);
-  park_PID(8, 150, 0);
-  turn_PID(-88, 75);
+  park_PID(9, 150, 0);
+  turn_PID(-91, 70);
   intake.move_velocity(-150);
   pros::delay(250);
   angler.move_velocity(0);
   intake.move_velocity(0);
   doublePunch();
-  turn_PID(-1.5,40);
-  park_PID(45, 200, 2);
+  park_PID(48, 200, 2);
   angler.move_velocity(0);
-  turn_PID(1.5,40);
-  park_PID(-54,150,0);
+  park_PID(-74,150,0);
   turn_PID(90,60);
-  park_PID(20,150,0);
+  park_PID(30,200,0);
 }
 
 void redfar_nopark(){
-  park_PID(-51,180,0);
+  park_PID(-52,180,0);
   arm_PID(90,200);
-  park_PID(23,150,0);
+  park_PID(22.5,150,0);
   pros::delay(100);
-  turn_PID(-118,60);
+  turn_PID(-110,50);
   pros::delay(200);
-  park_PID(12,60,5);
+  park_PID(12.5,80,5);
   park_PID(-26,150,0);
   pros::delay(100);
-  turn_PID(-87,65);
+  turn_PID(-86,60);
   pros::delay(100);
-  park_PID(24,150,2);
+  park_PID(24,100,2);
   pros::delay(500);
-  turn_PID(-45,65);
+  park_PID(-5,60,0);
+  pros::delay(100);
+  turn_PID(-41,65);
   pros::delay(200);
   doublePunch();
 
@@ -171,24 +170,24 @@ void arm_stack_task2(void* param){
 
 }
 void redfar_park(){
-  park_PID(-51,180,0);
+
+  park_PID(-52,200,0);
   arm_PID(90,200);
-  park_PID(23,150,0);
+  park_PID(22,170,0);
+  pros::delay(50);
+  turn_PID(-108,75);
   pros::delay(100);
-  turn_PID(-118,60);
-  pros::delay(200);
-  park_PID(12,60,5);
-  park_PID(-26,150,0);
+  park_PID(11.6,95,5);
+  park_PID(-26,180,0);
+  pros::delay(50);
+  turn_PID(-84,65);
   pros::delay(100);
-  turn_PID(-87,65);
-  pros::delay(100);
-  park_PID(24,150,2);
-  pros::delay(500);
-  park_PID(-10,150,0);
-  pros::delay(100);
-  turn_PID(-90,65);
-  pros::delay(100);
-  park_PID(16,200,0);
+  park_PID(22.2,180,2);
+  park_PID(-10,180,2);
+  pros::delay(50);
+  turn_PID(-80,60);
+  pros::delay(50);
+  park_PID(36,190,0);
   pros::delay(200);
 
 
@@ -279,39 +278,43 @@ void bluefar_park(){
 }
 
 void autonomous(){
-  bool list[3] = {blueSide, farSide, park}; //1, 2, 4
-  int list2[3] = {1,2,4};
-  int total = 0;
-  for(int i = 0; i < 2; i++){
-    if(list[i] == true){
-      total += list2[i];
-    }
-  }
+  if(blueSide == false)//if red
+   {
+     if(farSide == false){
+       if(park == true){
+          redclose_park();
+        }
+        else{
+          redclose_nopark();
+        }
+     }
+       else{ //far side
+         if(park == true){
+            redfar_park();
+          }
+          else{
+            redfar_nopark();
+          }
+     }
+   }
+ else {//blue side chosen
+   if(farSide == false){
+     if(park == true){
+        blueclose_park();
+      }
+      else{
+        blueclose_nopark();
+      }
+   }
+     else{ //far side
+       if(park == true){
+          bluefar_park();
+        }
+        else{
+          bluefar_nopark();
+        }
+   }
 
-  switch (total) {
-    case 1: //t f f
-      blueclose_nopark();
-      break;
-    case 2: //f t f
-      redfar_nopark();
-      break;
-    case 3: //t t f
-      bluefar_nopark();
-      break;
-    case 4: //f f t
-      redclose_park();
-      break;
-    case 5: //t f t
-      blueclose_park();
-      break;
-    case 6: //f t t
-      redfar_park();
-      break;
-    case 7: //t t t
-      bluefar_park();
-      break;
-    default ://when 0 (f f f)
-      redclose_nopark();
-  }
 
+}
 }
