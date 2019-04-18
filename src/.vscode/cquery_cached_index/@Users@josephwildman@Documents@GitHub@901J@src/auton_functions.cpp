@@ -15,7 +15,7 @@ const int DEFAULTSLEWRATEINCREMENT = 15;
 const int ARMGEARRATIO = 5;
 
 void arm_stack_task(void* param){
-  arm_PID(90,100);
+  arm_PID(90,85);
   while(left_wheel.get_target_velocity() >= 0){
   pros::delay(10);
 }
@@ -438,7 +438,7 @@ int calibrate(){
   printf("DONE \r\n");
   std::fstream file;
 
-   file.open("test.txt",std::ios::out);
+   file.open("/usd/test.txt",std::ios::out);
    if(!file)
    {
      std::cout<<"Error in creating file.."<<std::endl;
@@ -475,7 +475,7 @@ void shootSensor(){
 
 int readValue(){
     std::fstream file;
-    file.open("test.txt",std::ios::in);
+    file.open("/usd/test.txt",std::ios::in);
     if(!file){
         std::cout<<"Error in opening file..";
         return 0;

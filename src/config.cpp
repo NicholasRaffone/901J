@@ -30,8 +30,8 @@ pros::ADIEncoder mainEncoder(ENCODER_TOP_PORT,ENCODER_BOT_PORT,true);
 pros::ADIUltrasonic ultrasonic(ULTRASONIC_OUTPUT,ULTRASONIC_INPUT);
 pros::ADILineSensor ballSensor(LINESENSOR_INPUT);
 
-int calibrate_min = 0;
-int calibrate_max = 0;
+int calibrate_min = 625;
+int calibrate_max = 2600;
 bool blueSide = false; // 1
 bool farSide = false; // 2
 bool park = true; // 4

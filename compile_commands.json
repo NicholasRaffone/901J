@@ -25,11 +25,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/config.cpp.o",
-            "src/config.cpp"
+            "bin/initialize.cpp.o",
+            "src/initialize.cpp"
         ],
         "directory": "/Users/josephwildman/Documents/GitHub/901J",
-        "file": "src/config.cpp"
+        "file": "src/initialize.cpp"
     },
     {
         "arguments": [
@@ -57,11 +57,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/autonomous.cpp.o",
-            "src/autonomous.cpp"
+            "bin/config.cpp.o",
+            "src/config.cpp"
         ],
         "directory": "/Users/josephwildman/Documents/GitHub/901J",
-        "file": "src/autonomous.cpp"
+        "file": "src/config.cpp"
     },
     {
         "arguments": [
@@ -121,11 +121,11 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/initialize.cpp.o",
-            "src/initialize.cpp"
+            "bin/auton_functions.cpp.o",
+            "src/auton_functions.cpp"
         ],
         "directory": "/Users/josephwildman/Documents/GitHub/901J",
-        "file": "src/initialize.cpp"
+        "file": "src/auton_functions.cpp"
     },
     {
         "arguments": [
@@ -153,10 +153,10 @@
             "-fdiagnostics-color",
             "--std=gnu++17",
             "-o",
-            "bin/auton_functions.cpp.o",
-            "src/auton_functions.cpp"
+            "bin/autonomous.cpp.o",
+            "src/autonomous.cpp"
         ],
         "directory": "/Users/josephwildman/Documents/GitHub/901J",
-        "file": "src/auton_functions.cpp"
+        "file": "src/autonomous.cpp"
     }
 ]

@@ -194,7 +194,6 @@ void initialize() {/*Create a three buttons, color, side, display auton */
     lv_obj_align(btn4, btn2, LV_ALIGN_OUT_RIGHT_TOP, 35,60);
 
 
-    readValue();
 }
 
 /**
