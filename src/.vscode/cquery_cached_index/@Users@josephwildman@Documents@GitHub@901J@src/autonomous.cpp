@@ -303,6 +303,7 @@ void bluefar_park(){
 }
 
 void autonomous(){
+  
   if(blueSide == false)//if red
    {
      if(farSide == false){

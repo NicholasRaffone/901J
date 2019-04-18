@@ -2,6 +2,9 @@
 #include "cmath"
 #include "config.hpp"
 #include "auton_functions.h"
+#include <iostream>
+#include <fstream>
+
 //UNITS ARE INCHES!!!!
 const float ENCODER_WHEEL_RADIUS = 1.625;
 const double WHEEL_RADIUS = 2.0;
@@ -405,7 +408,7 @@ void move_ultrasonic(float targetDistance, int maxVelocity, int multiTask){
   brakeMotors();
 }
 
-void calibrate(){
+int calibrate(){
   printf("min value, place ball \r\n");
   long long int values = 0;
   while (master.get_digital(pros::E_CONTROLLER_DIGITAL_A) == 0){
@@ -433,7 +436,20 @@ void calibrate(){
   calibrate_max = values / 100;
   printf("MAX: %d\r\n",calibrate_min);
   printf("DONE \r\n");
+  std::fstream file;
+
+   file.open("test.txt",std::ios::out);
+   if(!file)
+   {
+     std::cout<<"Error in creating file.."<<std::endl;
+     return 0;
+   }
+   std::cout<<"\nFile created successfully."<<std::endl;
+   file<<calibrate_min<<" "<<calibrate_max<<std::endl;
+   file.close();
+   std::cout<<"\nFile saved and closed succesfully."<<std::endl;
   pros::delay(1000);
+  return 0;
 }
 void shootSensor(){
   int minValue;
@@ -455,4 +471,20 @@ void shootSensor(){
   }
   shootpuncher();
   intake.move_velocity(0);
+}
+
+int readValue(){
+    std::fstream file;
+    file.open("test.txt",std::ios::in);
+    if(!file){
+        std::cout<<"Error in opening file..";
+        return 0;
+    }
+    file>>calibrate_min;
+    file>>calibrate_max;
+    std::cout<<"min: "<<calibrate_min<<",max:"<<calibrate_max<<std::endl;
+    printf("MIN MIN %d\r\n", calibrate_min);
+    printf("MAX MAX %d\r\n", calibrate_max);
+
+    return 0;
 }

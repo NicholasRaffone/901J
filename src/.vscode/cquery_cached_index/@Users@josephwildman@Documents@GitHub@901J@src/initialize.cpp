@@ -2,6 +2,7 @@
 #include "display/lv_conf.h"
 #include "config.hpp"
 #include <string>
+#include "auton_functions.h"
 
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -191,6 +192,9 @@ void initialize() {/*Create a three buttons, color, side, display auton */
     lv_obj_set_style(btn4, &parkstyle);
     lv_btn_set_action(btn4, LV_BTN_ACTION_CLICK, parkyes);
     lv_obj_align(btn4, btn2, LV_ALIGN_OUT_RIGHT_TOP, 35,60);
+
+
+    readValue();
 }
 
 /**

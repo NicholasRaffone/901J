@@ -71,10 +71,16 @@ void puncher_task(void* param){
       //angler.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
       angler.move_velocity(0);
     }
+    /*
     if(master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
       slewRateControl(&arm,200,DEFAULTSLEWRATEINCREMENT);
     } else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
       slewRateControl(&arm,-200,DEFAULTSLEWRATEINCREMENT);
+    }*/
+    if (master.get_digital(pros::E_CONTROLLER_DIGITAL_A) != 0){
+      calibrate();
+    }else if(master.get_digital(pros::E_CONTROLLER_DIGITAL_B) != 0){
+      readValue();
     }
     else {
       arm.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
