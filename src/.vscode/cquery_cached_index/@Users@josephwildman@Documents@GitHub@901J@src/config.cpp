@@ -1,8 +1,8 @@
 #include "config.hpp"
 const int LEFT_WHEEL_PORT = 4; //17
 const int LEFT_CHAIN_PORT = 3; //18
-const int RIGHT_CHAIN_PORT = 1; //14
-const int RIGHT_WHEEL_PORT = 2; //15
+const int RIGHT_CHAIN_PORT = 10; //14
+const int RIGHT_WHEEL_PORT = 9; //15
 const int INTAKE_MOTOR_PORT = 6; //9
 const int PUNCHER_MOTOR_PORT = 12; //20
 const int ANGLER_MOTOR_PORT = 13; //11

@@ -282,19 +282,19 @@ void bluefar_nopark(){
 
 void bluefar_park(){
 
-  park_PID(-53,200,0);
+  park_PID(-53.5,200,0);
   arm_PID(90,200);
   park_PID(22,170,0);
   pros::delay(50);
-  turn_PID(108,75);
+  turn_PID(110,70);
   pros::delay(100);
-  park_PID(15,110,5);
-  park_PID(-29,180,0);
+  park_PID(13,110,5);
+  park_PID(-28,180,0);
   pros::delay(50);
   turn_PID(85,65);
   pros::delay(100);
-  park_PID(24.2,180,2);
-  park_PID(-13.5,180,2);
+  park_PID(22.0,180,2);
+  park_PID(-14,160,2);
   pros::delay(50);
   turn_PID(85,60);
   pros::delay(50);
