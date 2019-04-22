@@ -119,7 +119,7 @@ void redclose_park(){
 }
 
 void redfar_nopark(){
-  park_PID(-52.4,180,0);
+  park_PID(-52.4,150,0);
   arm_PID(90,200);
   park_PID(22.5,150,0);
   pros::delay(100);
@@ -173,23 +173,23 @@ void arm_stack_task2(void* param){
 }
 void redfar_park(){
 
-  park_PID(-52.4,200,0);
+  park_PID(-51.5,150,0);
   arm_PID(90,200);
   park_PID(22,170,0);
   pros::delay(50);
-  turn_PID(-108,75);
+  turn_PID(-108,70);
   pros::delay(100);
-  park_PID(11,95,5);
-  park_PID(-26,180,0);
+  park_PID(10,95,5);
+  park_PID(-30,180,0);
   pros::delay(50);
   turn_PID(-84,65);
   pros::delay(100);
-  park_PID(22.2,180,2);
+  park_PID(22.5,180,2);
   park_PID(-11,180,2);
   pros::delay(50);
   turn_PID(-80,60);
   pros::delay(50);
-  park_PID(36,190,0);
+  park_PID(34,190,2);
   pros::delay(200);
 
 
@@ -259,7 +259,7 @@ void blueclose_park(){
 }
 
 void bluefar_nopark(){
-  park_PID(-53,190,0);
+  park_PID(-53,150,0);
   arm_PID(90,200);
   park_PID(22,150,0);
   pros::delay(100);
@@ -271,7 +271,7 @@ void bluefar_nopark(){
   turn_PID(86,60);
   pros::delay(100);
   park_PID(24.5,100,2);
-  park_PID(-5,60,2);
+  park_PID(-8,60,2);
   pros::delay(100);
   turn_PID(41,65);
   intake.move_velocity(-150);
@@ -282,23 +282,23 @@ void bluefar_nopark(){
 
 void bluefar_park(){
 
-  park_PID(-53.5,200,0);
+  park_PID(-52,150,0);
   arm_PID(90,200);
   park_PID(22,170,0);
   pros::delay(50);
-  turn_PID(110,70);
+  turn_PID(108,70);
   pros::delay(100);
-  park_PID(13,110,5);
-  park_PID(-28,180,0);
+  park_PID(10.8,110,5);
+  park_PID(-32,180,0);
   pros::delay(50);
   turn_PID(85,65);
   pros::delay(100);
   park_PID(22.0,180,2);
-  park_PID(-14,160,2);
+  park_PID(-15,180,2);
   pros::delay(50);
   turn_PID(85,60);
   pros::delay(50);
-  park_PID(36,190,0);
+  park_PID(34,190,2);
   pros::delay(200);
 }
 

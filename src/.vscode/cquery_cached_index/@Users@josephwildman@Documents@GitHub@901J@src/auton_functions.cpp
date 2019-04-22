@@ -310,9 +310,9 @@ void arm_PID(float targetDegree, int maxVelocity){
   double currentPosition = 0;
   double error = 0;
   double previous_error = degreeGoal;
-  double kP = 0.7;
-  double kI = 0.001;
-  double kD = 0.03;
+  double kP = 0.8;
+  double kI = 0.0025;
+  double kD = 0.001;
   double integral = 0;
   double derivative = 0;
 
@@ -340,7 +340,7 @@ void arm_PID(float targetDegree, int maxVelocity){
 
     slewRateControl(&arm, targetVelocity, DEFAULTSLEWRATEINCREMENT);
 
-    if (std::abs(error) < 1){
+    if (std::abs(error) < 4){
       goalMet = true;
     }
 
